@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Collection — Mr Benimaru</title>
+  <meta name="description" content="Preview the Mr Benimaru NFT collection — knights, ninjas, sumo, spacemen and more, each in their own costume." />
+
+  <!-- social share cards — TODO before launch: replace SITE_URL with the real domain -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Mr Benimaru" />
+  <meta property="og:title" content="Collection — Mr Benimaru" />
+  <meta property="og:description" content="Preview the Mr Benimaru NFT collection — knights, ninjas, sumo, spacemen and more, each in their own costume." />
+  <meta property="og:url" content="https://SITE_URL/collection.html" />
+  <meta property="og:image" content="https://SITE_URL/Assets/Pics/og-card.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@MrBenimarusays" />
+
+  <!-- hinomaru favicon (inline SVG — no extra file) -->
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='42' fill='%23E5352B' stroke='%232B2B2B' stroke-width='8'/%3E%3C/svg%3E" />
+  <meta name="theme-color" content="#FBF7EF" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,500..700,50&family=EB+Garamond:ital,wght@0,400..700;1,400..700&family=Zen+Maru+Gothic:wght@400;500;700&display=swap" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main" data-i18n="nav.skip">Skip to content</a>
+
+  <!-- ===== NAV ===== -->
+  <header class="nav">
+    <div class="nav__inner">
+      <a class="nav__brand" href="index.html">
+        <span class="dot"></span> MR BENIMARU
+      </a>
+      <button class="nav__toggle" aria-label="Menu" aria-expanded="false" aria-controls="nav-links">☰</button>
+      <ul class="nav__links" id="nav-links">
+        <li><a href="index.html" data-i18n="nav.home">Home</a></li>
+        <li><a href="inspiration.html" data-i18n="nav.inspiration">Inspiration</a></li>
+        <li><a href="collection.html" data-i18n="nav.collection">Collection</a></li>
+        <li><a href="whitelist.html" data-i18n="nav.whitelist">Whitelist</a></li>
+        <li><a href="https://x.com/MrBenimarusays" target="_blank" rel="noopener">X / Twitter</a></li>
+      </ul>
+      <button class="lang-toggle" id="lang-toggle" type="button" aria-label="Switch to Japanese" title="日本語 / English">
+        <span class="lang-toggle__flag">🇯🇵</span>
+        <span class="lang-toggle__label">日本語</span>
+      </button>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- ambient liquid bubbles behind the page head — decorative, hidden without js/goo.js -->
+    <div class="page-goo" aria-hidden="true"><div class="page-goo__field"><i></i><i></i><i></i></div></div>
+    <div class="page-head wrap">
+      <p class="eyebrow" data-i18n="col.eyebrow">A peek behind the door</p>
+      <h1 data-i18n="col.h1">The Collection</h1>
+      <p class="lead center" style="margin-inline:auto;" data-i18n="col.lead">
+        Find the matching pairs.
+      </p>
+    </div>
+
+    <section class="section" style="padding-top:1rem;">
+      <div class="wrap">
+        <div class="karuta-bar">
+          <p class="karuta-status" id="karuta-status" aria-live="polite" data-i18n="col.status">Memorize the cards…</p>
+          <!-- goo buttons: data-i18n lives on the inner label span — i18n.js swaps
+               innerHTML, which would wipe the goo layer if it sat on the button -->
+          <button class="btn btn--purple btn--goo" id="karuta-restart" type="button">
+            <span class="btn__goo" aria-hidden="true"><span class="btn__goo-pill"></span><i></i><i></i><i></i></span>
+            <span class="btn__label" data-i18n="col.newgame">New Game</span>
+          </button>
+        </div>
+        <!-- Cards are built by js/karuta.js from the costume image pool -->
+        <div class="grid karuta-board" id="karuta-board" aria-label="Memory matching game"></div>
+
+        <div class="center" style="margin-top:2.8rem;">
+          <p class="lead center" style="margin-inline:auto;" data-i18n="col.cta">Like what you see? The door is open.</p>
+          <a class="btn btn--purple btn--goo" href="whitelist.html">
+            <span class="btn__goo" aria-hidden="true"><span class="btn__goo-pill"></span><i></i><i></i><i></i></span>
+            <span class="btn__label" data-i18n="cta.whitelist">Join the Whitelist</span>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- lightbox overlay -->
+  <div class="lightbox" id="lightbox" aria-hidden="true">
+    <button class="lightbox__close" aria-label="Close">✕</button>
+    <img src="" alt="" />
+  </div>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="footer__inner wrap">
+      <div class="footer__id">
+        <div>
+          <a href="index.html" class="nav__brand"><span class="dot"></span> MR BENIMARU</a>
+          <p class="muted" style="margin:.4rem 0 0;" data-i18n="footer.copy">© 2026 Mr Benimaru. As seen on the changing-room door.</p>
+        </div>
+        <span class="hanko" aria-hidden="true">紅丸</span>
+      </div>
+      <nav class="footer__social" aria-label="Social links">
+        <a href="https://x.com/MrBenimarusays" target="_blank" rel="noopener">X / Twitter</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script src="js/nav.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/goo.js"></script>
+  <script src="js/karuta.js"></script>
+</body>
+</html>

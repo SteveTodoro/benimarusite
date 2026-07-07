@@ -1,0 +1,1729 @@
+/* =========================================================
+   MR BENIMARU — shared design system
+   Retro / nostalgic NFT landing site (plain HTML/CSS/JS)
+   ========================================================= */
+
+/* Fonts are loaded via <link> in each page's <head> (faster than @import here).
+   Zen Maru Gothic is the Japanese partner face — rounded like Fredoka/Quicksand —
+   so the 日本語 toggle doesn't fall back to a bare system font. */
+
+:root {
+  /* palette sampled from the wordmark */
+  --bg:      #FBF7EF;   /* warm off-white paper */
+  --bg-2:    #F4ECDD;   /* slightly deeper panel */
+  --ink:     #2B2B2B;   /* text + cartoon outlines */
+  --orange:  #F0895D;
+  --blue:    #8FC5E8;
+  --purple:  #B79FD4;
+  --yellow:  #F5D06A;
+  --green:   #9FCB8E;
+  --teal:    #7FCDC0;
+  --pink:    #F2A0A8;
+  --red:     #E5352B;   /* rising-sun red */
+
+  --line:    #2B2B2B;            /* bold cartoon outline */
+  --shadow:  6px 6px 0 var(--line);
+  --shadow-sm: 4px 4px 0 var(--line);
+  --radius:  18px;
+
+  --maxw: 1120px;
+  --font-head: 'Fraunces', 'Zen Maru Gothic', serif;
+  --font-body: 'EB Garamond', 'Zen Maru Gothic', serif;
+}
+
+* { box-sizing: border-box; }
+
+::selection { background: var(--yellow); color: var(--ink); }
+
+/* cross-fade between pages instead of a hard white flash (progressive enhancement) */
+@view-transition { navigation: auto; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  /* short pages: footer still sits at the bottom of the viewport */
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font-body);
+  /* EB Garamond runs small for its em size — compensate a touch */
+  font-size: 1.0625rem;
+  font-weight: 500;
+  color: var(--ink);
+  background-color: var(--bg);
+  /* faint dotty paper texture */
+  background-image: radial-gradient(var(--bg-2) 1px, transparent 1px);
+  background-size: 22px 22px;
+  line-height: 1.6;
+}
+
+h1, h2, h3 { font-family: var(--font-head); line-height: 1.1; margin: 0 0 .5em; text-wrap: balance; }
+h1 { font-size: clamp(2.2rem, 6vw, 4rem); }
+h2 { font-size: clamp(1.7rem, 4vw, 2.6rem); }
+h3 { font-size: 1.25rem; }
+p  { margin: 0 0 1rem; text-wrap: pretty; }
+a  { color: inherit; }
+
+/* height:auto keeps images with width/height attributes (set for layout
+   stability) from stretching when CSS narrows them */
+img { max-width: 100%; height: auto; display: block; }
+
+.wrap { width: min(100% - 3rem, var(--maxw)); margin-inline: auto; }
+.section { padding: clamp(3rem, 8vw, 6rem) 0; }
+.center { text-align: center; }
+.lead { font-size: 1.3rem; max-width: 60ch; }
+.eyebrow {
+  font-family: var(--font-head);
+  font-weight: 700;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  font-size: .85rem;
+  color: var(--orange);
+  margin-bottom: .6rem;
+}
+
+/* keyboard users jump straight past the nav; invisible until focused */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  z-index: 100;
+  padding: .7rem 1.2rem;
+  font-family: var(--font-head);
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--ink);
+  background: var(--yellow);
+  border: 3px solid var(--line);
+  border-radius: 999px;
+}
+.skip-link:focus {
+  left: 1rem;
+  top: 1rem;
+}
+
+/* ---------- Buttons ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  font-family: var(--font-head);
+  font-weight: 600;
+  font-size: 1.05rem;
+  text-decoration: none;
+  cursor: pointer;
+  padding: .85rem 1.6rem;
+  border: 3px solid var(--line);
+  border-radius: 999px;
+  background: var(--blue);
+  color: var(--ink);
+  box-shadow: var(--shadow-sm);
+  transition: transform .12s ease, box-shadow .12s ease;
+}
+.btn:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--line); }
+.btn:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--line); }
+.btn--primary { background: var(--orange); }
+.btn--ghost   { background: var(--bg); }
+.btn--purple  { background: var(--purple); }
+
+/* ---------- Nav ---------- */
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(251, 247, 239, .9);
+  backdrop-filter: blur(8px);
+  border-bottom: 3px solid var(--line);
+}
+.nav__inner {
+  width: min(100% - 2.4rem, var(--maxw));
+  margin-inline: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: .7rem 0;
+}
+.nav__brand {
+  display: flex;
+  align-items: center;
+  gap: .55rem;
+  text-decoration: none;
+  font-family: var(--font-head);
+  font-weight: 700;
+  font-size: 1.25rem;
+}
+.nav__brand .dot {
+  width: 26px; height: 26px;
+  background: var(--red);
+  border-radius: 50%;
+  border: 2px solid var(--line);
+  flex: 0 0 auto;
+}
+.nav__links {
+  display: flex;
+  align-items: center;
+  gap: .35rem;
+  list-style: none;
+  margin: 0; padding: 0;
+}
+.nav__links a {
+  text-decoration: none;
+  font-family: var(--font-head);
+  font-weight: 500;
+  padding: .45rem .8rem;
+  border-radius: 999px;
+  border: 3px solid transparent;
+  transition: background .15s ease, border-color .15s ease;
+}
+.nav__links a:hover { background: var(--bg-2); }
+.nav__links a.is-active {
+  background: var(--yellow);
+  border-color: var(--line);
+}
+.nav__toggle {
+  display: none;
+  border: 3px solid var(--line);
+  background: var(--bg);
+  border-radius: 12px;
+  width: 46px; height: 42px;
+  cursor: pointer;
+  font-size: 1.2rem;
+}
+
+/* push everything after the brand to the right edge of the bar */
+.nav__brand { margin-right: auto; }
+
+/* language flag toggle */
+.lang-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  font-family: var(--font-head);
+  font-weight: 500;
+  font-size: .9rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: .4rem .7rem;
+  background: var(--bg);
+  border: 3px solid var(--line);
+  border-radius: 999px;
+  transition: background .15s ease, transform .1s ease;
+}
+.lang-toggle:hover { background: var(--bg-2); }
+.lang-toggle:active { transform: translateY(1px); }
+.lang-toggle__flag { font-size: 1.2rem; }
+
+@media (max-width: 760px) {
+  .nav__toggle { display: block; }
+  .nav__links {
+    position: absolute;
+    top: 100%; left: 0; right: 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: .25rem;
+    background: var(--bg);
+    border-bottom: 3px solid var(--line);
+    padding: .8rem 1.2rem 1.2rem;
+    display: none;
+  }
+  .nav__links.is-open { display: flex; }
+  .nav__links a { padding: .7rem .8rem; }
+  .lang-toggle__label { display: none; }   /* flag-only to save space */
+}
+
+/* ---------- Hero ---------- */
+.hero {
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+  padding: clamp(2.5rem, 7vw, 5rem) 0 clamp(3rem, 8vw, 5.5rem);
+  /* soft pastel wash so the hero reads as its own scene, not flat paper */
+  background:
+    radial-gradient(110% 80% at 50% -10%, rgba(143, 197, 232, .26), transparent 58%),
+    radial-gradient(60% 55% at 88% 14%, rgba(245, 208, 106, .20), transparent 52%);
+}
+.hero__inner { position: relative; z-index: 1; }
+.hero__logo {
+  display: block;
+  width: min(92%, 760px);
+  margin: 0 auto 1.6rem;
+  /* the banner JPG has a baked-in white background — a paper-toned plate
+     plus multiply blend melts the white into the page, so the hero wash
+     and goo blobs read through faintly instead of a stark #fff rectangle
+     (border/shadow are solid ink, so multiply leaves them unchanged) */
+  background: var(--bg);
+  mix-blend-mode: multiply;
+  border: 4px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1rem 1.4rem;
+}
+/* the h1 tagline under the banner — headline-sized, not poster-sized */
+.hero__tagline {
+  font-size: clamp(1.35rem, 3.2vw, 1.9rem);
+  font-weight: 600;
+  max-width: 30ch;
+  margin: 0 auto .4rem;
+}
+.hero__cta { display: flex; gap: .9rem; justify-content: center; flex-wrap: wrap; margin-top: 1.6rem; }
+
+/* launch teaser badge (stands in for the stat strip until mint details land) */
+.launch-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  margin: 2.4rem 0 0;
+  font-family: var(--font-head);
+  font-weight: 600;
+  font-size: 1.05rem;
+  padding: .6rem 1.4rem;
+  background: var(--yellow);
+  border: 3px solid var(--line);
+  border-radius: 999px;
+  box-shadow: var(--shadow-sm);
+}
+
+/* teaser stat strip (currently unused — kept for when mint details land) */
+.stats {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: .8rem;
+  margin-top: 2.4rem;
+}
+.stat {
+  background: var(--bg);
+  border: 3px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  padding: .9rem 1.4rem;
+  min-width: 140px;
+}
+.stat b { font-family: var(--font-head); font-size: 1.5rem; display: block; }
+.stat span { font-size: .85rem; opacity: .8; }
+
+/* ---------- Generic card ---------- */
+.card {
+  background: var(--bg);
+  border: 3px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+/* ---------- Vintage 1970s colour TV (home page hero montage) ---------- */
+.tv-row {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: min(540px, 100%);
+  margin: 2.4rem auto 0;
+}
+.tv {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  gap: 14px;
+  width: 100%;
+  max-width: min(500px, 100%);
+  padding: 16px 16px 20px;
+  /* walnut cabinet: warm base wash with fine grain streaks layered over it */
+  background:
+    repeating-linear-gradient(92deg,
+      rgba(60, 40, 24, .22) 0 2px,
+      rgba(124, 86, 51, 0) 2px 4px,
+      rgba(90, 62, 36, .28) 4px 6px,
+      rgba(124, 86, 51, 0) 6px 9px),
+    linear-gradient(160deg, #7d5636 0%, #6b4a2a 55%, #5a3d22 100%);
+  border: 4px solid var(--line);
+  border-radius: 16px 16px 18px 18px;
+  /* raised top highlight + hard cartoon offset + soft drop, matching the site's depth style */
+  box-shadow:
+    inset 0 3px 0 rgba(255, 255, 255, .16),
+    inset 0 -7px 0 rgba(0, 0, 0, .22),
+    8px 10px 0 var(--line),
+    10px 16px 26px rgba(43, 43, 43, .28);
+  transition: transform .16s ease, box-shadow .16s ease;
+}
+.tv:hover {
+  transform: translateY(-3px);
+  box-shadow:
+    inset 0 3px 0 rgba(255, 255, 255, .16),
+    inset 0 -7px 0 rgba(0, 0, 0, .22),
+    8px 13px 0 var(--line),
+    10px 20px 30px rgba(43, 43, 43, .32);
+}
+/* the CRT: dark bezel around a bulged-corner glass screen */
+.tv__screen {
+  position: relative;
+  flex: 1 1 auto;
+  padding: 10px;
+  background: #1b1b1b;
+  border: 3px solid var(--line);
+  border-radius: 22px / 16px;
+  box-shadow: inset 0 2px 4px rgba(255, 255, 255, .12);
+}
+.tv__screen img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  background: #000;
+  border-radius: 18px / 13px;   /* the classic curved-corner CRT glass */
+}
+/* "screen off" overlay: dark glass with faint scanlines, sits over the (empty) picture */
+.tv__off {
+  position: absolute;
+  inset: 10px;
+  border-radius: 18px / 13px;
+  background:
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, .05) 0 1px, rgba(0, 0, 0, .55) 1px 3px),
+    radial-gradient(circle at 50% 42%, #3a3a3a 0%, #141414 72%);
+  pointer-events: none;
+  z-index: 2;
+}
+/* powered on: flash white, then fade the dark overlay away to reveal the GIF */
+.tv-row.is-on .tv__off {
+  animation: tv-power-on .5s ease forwards;
+}
+/* remembered state restored on load: skip the flash, just show it already on */
+.tv-row.no-flash.is-on .tv__off {
+  animation: none;
+  opacity: 0;
+}
+@keyframes tv-power-on {
+  0%   { opacity: 1; background: #fdf6e6; }
+  16%  { opacity: 1; background: #fdf6e6; }   /* the CRT "flash" */
+  100% { opacity: 0; background: #fdf6e6; }
+}
+/* screen glass: soft inner vignette + a diagonal glare sheen (sits above everything) */
+.tv__screen::after {
+  content: "";
+  position: absolute;
+  inset: 10px;
+  border-radius: 18px / 13px;
+  background: linear-gradient(125deg, rgba(255, 255, 255, .22) 0%, rgba(255, 255, 255, 0) 42%);
+  box-shadow: inset 0 0 24px rgba(0, 0, 0, .55);
+  pointer-events: none;
+  z-index: 3;
+}
+/* control panel to the right of the screen */
+.tv__panel {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding-top: 4px;
+}
+.tv__brand {
+  font-family: "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", serif;
+  font-weight: 700;
+  font-size: .95rem;
+  line-height: 1;
+  color: #f4e7cf;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, .5);
+}
+.tv__knob {
+  position: relative;
+  width: 22px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 3px solid var(--line);
+  background: radial-gradient(circle at 35% 30%, #4a4a4a 0%, #2b2b2b 70%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .25);
+}
+.tv__knob::before {           /* pointer notch */
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 50%;
+  width: 2px;
+  height: 6px;
+  transform: translateX(-50%);
+  background: #f4e7cf;
+  border-radius: 1px;
+}
+.tv__grille {
+  width: 26px;
+  flex: 1 1 auto;
+  min-height: 34px;
+  border: 3px solid var(--line);
+  border-radius: 4px;
+  background:
+    repeating-linear-gradient(var(--line) 0 2px, #8a5f39 2px 5px);
+}
+
+/* ---------- Red power knob (click to turn the TV on/off) ---------- */
+.tv__power {
+  appearance: none;
+  -webkit-appearance: none;
+  font: inherit;
+  padding: 0;
+  position: relative;
+  width: 26px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 3px solid var(--line);
+  background: radial-gradient(circle at 35% 30%, #ff6f63 0%, var(--red) 58%, #b81e16 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .4);
+  cursor: pointer;
+  transition: transform .25s ease, box-shadow .2s ease;
+}
+.tv__power::before {           /* pointer notch, points up when off */
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 50%;
+  width: 2px;
+  height: 7px;
+  transform: translateX(-50%);
+  background: #f4e7cf;
+  border-radius: 1px;
+}
+.tv__power:hover  { filter: brightness(1.06); }
+.tv__power:active { transform: scale(.94); }
+.tv__power:focus-visible { outline: 3px solid var(--line); outline-offset: 3px; }
+/* on: knob turns and lights up with a red glow */
+.tv-row.is-on .tv__power {
+  transform: rotate(45deg);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .4), 0 0 0 3px rgba(229, 53, 43, .38);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tv { transition: none; }
+  .tv:hover { transform: none; }
+  .tv__power { transition: none; }
+  .tv-row.is-on .tv__power { transform: none; }
+  .tv-row.is-on .tv__off { animation: none; opacity: 0; }
+}
+@media (max-width: 560px) {
+  .tv { max-width: 100%; }
+  .tv__panel { gap: 9px; }
+  .tv__knob { width: 18px; }
+  .tv__grille { width: 20px; }
+}
+
+/* ---------- Chopsticks (preserved for reuse — see index.html) ----------
+   A pair of waribashi sheathed in a hi-no-maru paper sleeve. Retired from the
+   home page when the bento frame became a TV; kept here to drop onto another page.
+
+.chopsticks {
+  position: relative;
+  flex: 0 0 auto;
+  display: flex;
+  gap: 7px;
+  padding-top: 6px;
+  filter: drop-shadow(3px 5px 4px rgba(43, 43, 43, .22));
+}
+.chopstick {
+  width: 15px;
+  height: 100%;
+  background: linear-gradient(95deg, #EAD2A4 0%, #DCB67E 48%, #C99B59 100%);
+  border: 3px solid var(--line);
+  border-radius: 7px 7px 4px 4px;
+  box-shadow: inset 2px 0 0 rgba(255, 255, 255, .35);
+}
+.hashibukuro {
+  position: absolute;
+  bottom: 0;
+  left: -7px;
+  right: -7px;
+  height: 38%;
+  background: var(--bg);
+  border: 3px solid var(--line);
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  padding: 6px 0;
+  box-shadow: inset 0 10px 0 -8px var(--line);
+}
+.hashibukuro__sun {
+  width: 52%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--red);
+  border: 2px solid var(--line);
+  flex: 0 0 auto;
+}
+.hashibukuro__kanji {
+  font-family: "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", serif;
+  font-weight: 700;
+  font-size: 1.1rem;
+  line-height: 1;
+  color: var(--ink);
+}
+---------- end preserved chopsticks ---------- */
+
+/* page header band */
+.page-head {
+  text-align: center;
+  padding: clamp(3rem, 7vw, 4.5rem) 0 1rem;
+}
+
+/* ---------- Inspiration ---------- */
+
+/* big pastel year, digits colored like the wordmark, gently hand-set */
+.year-mark {
+  display: flex;
+  justify-content: center;
+  gap: .04em;
+  font-family: var(--font-head);
+  font-weight: 700;
+  font-size: clamp(4rem, 12vw, 7.5rem);
+  line-height: 1;
+  margin: .05em 0 .25em;
+  user-select: none;
+}
+.year-mark span:nth-child(4n+1) { color: var(--orange); transform: rotate(-3deg); }
+.year-mark span:nth-child(4n+2) { color: var(--blue);   transform: rotate(2deg) translateY(.03em); }
+.year-mark span:nth-child(4n+3) { color: var(--purple); transform: rotate(-2deg); }
+.year-mark span:nth-child(4n)   { color: var(--green);  transform: rotate(3deg) translateY(.02em); }
+/* smaller variant for word headings ("The Artist") so they fit on phones */
+.year-mark--sm { font-size: clamp(2.4rem, 8vw, 5rem); }
+.year-mark__gap { width: .35em; }
+
+/* whitelist FAQ — compact question/answer rows */
+.faq { max-width: 560px; margin: 1.4rem auto 0; font-size: 1.1rem; }
+.faq__row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  padding: .65rem .15rem;
+  border-bottom: 2px dashed rgba(43, 43, 43, .25);
+}
+.faq__row:last-child { border-bottom: 0; }
+.faq dt { font-family: var(--font-head); font-weight: 700; }
+.faq dd { margin: 0; text-align: right; }
+.prose { max-width: 65ch; margin-inline: auto; font-size: 1.15rem; line-height: 1.75; }
+.prose .placeholder {
+  background: repeating-linear-gradient(-45deg, #fff7e6, #fff7e6 10px, #fdeccd 10px, #fdeccd 20px);
+  border: 2px dashed var(--orange);
+  border-radius: 12px;
+  padding: 1rem 1.2rem;
+  margin: 1.4rem 0;
+}
+.ref-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.4rem;
+  margin-top: 2.5rem;
+}
+.ref-grid figure { margin: 0; }
+.ref-grid img {
+  width: 100%;
+  aspect-ratio: 4/3;
+  object-fit: contain;
+  object-position: center;
+  /* white mat: the stills have baked-in white backgrounds, so letterbox space must be white too */
+  background: #fff;
+  padding: .75rem;
+  border-bottom: 3px solid var(--line);
+}
+.ref-grid figcaption { padding: .7rem 1rem; font-size: .9rem; }
+
+/* artist images are full-bleed square illustrations, not photos on a
+   white background — skip the white mat so no seam shows against them */
+.ref-grid--art img {
+  aspect-ratio: 1/1;
+  background: none;
+  padding: 0;
+}
+.ref-zoom { display: block; cursor: zoom-in; }
+.ref-zoom:focus-visible { outline: 3px solid var(--orange); outline-offset: -3px; }
+
+/* pop-up on hover, same feel as the home-page TV / .nft cards.
+   Uses the standalone `translate` property so it can't fight the
+   reveal-on-scroll animation, which owns `transform` on these figures. */
+.ref-grid .card { transition: translate .16s ease, box-shadow .16s ease; }
+.ref-grid .card:hover,
+.ref-grid .card:focus-within {
+  translate: -3px -3px;
+  box-shadow: 9px 9px 0 var(--line);
+}
+
+/* ---------- Collection grid ---------- */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 1.4rem;
+  margin-top: 2.5rem;
+}
+.nft {
+  cursor: pointer;
+  transition: transform .14s ease, box-shadow .14s ease;
+}
+.nft:hover { transform: translate(-3px, -3px); box-shadow: 9px 9px 0 var(--line); }
+.nft img { width: 100%; aspect-ratio: 1; object-fit: cover; background: var(--bg-2); }
+.nft figcaption {
+  font-family: var(--font-head);
+  font-weight: 500;
+  padding: .65rem .9rem;
+  border-top: 3px solid var(--line);
+  display: flex;
+  justify-content: space-between;
+}
+.nft figcaption .tag { color: var(--orange); }
+
+/* ---------- Karuta memory game ---------- */
+.karuta-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+.karuta-status {
+  font-family: var(--font-head);
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+.karuta-board { position: relative; margin-top: 1.2rem; }   /* anchors the クリア overlay */
+
+/* ---------- クリア celebration (shared game-win stamp) ----------
+   Built on win by js/karuta.js (memory game, auto-redeals after) and
+   js/puzzle.js (whitelist gate, stamp plays over the solved picture):
+   a cream veil over the board and a big hinomaru stamp that slams in,
+   holds, then zooms away. Both animations run once; the overlay element
+   is removed by JS when they finish. Parent needs position:relative. */
+.game-clear {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  background: rgba(251, 247, 239, .6);
+  border-radius: var(--radius);
+  animation: game-clear-veil 2s ease both;
+}
+.game-clear__stamp {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: min(64%, 300px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--red);
+  border: 4px solid var(--line);
+  box-shadow: var(--shadow);
+  font-family: var(--font-head);
+  font-weight: 700;
+  font-size: clamp(2rem, 7vw, 3rem);
+  letter-spacing: .04em;
+  color: var(--bg);
+  animation: game-clear-stamp 2s cubic-bezier(.34, 1.56, .64, 1) both;
+}
+/* shockwave ring fired as the stamp lands */
+.game-clear__stamp::after {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border: 4px solid var(--red);
+  border-radius: 50%;
+  opacity: 0;
+  animation: game-clear-ring 2s ease-out both;
+}
+@keyframes game-clear-veil {
+  0%   { opacity: 0; }
+  10%  { opacity: 1; }
+  82%  { opacity: 1; }
+  100% { opacity: 0; }
+}
+/* zoom in from "camera", overshoot-settle, hold, wind up, zoom out */
+@keyframes game-clear-stamp {
+  0%   { opacity: 0; transform: scale(3) rotate(4deg); }
+  14%  { opacity: 1; transform: scale(.92) rotate(-7deg); }
+  24%  { transform: scale(1.06) rotate(-4deg); }
+  32%  { transform: scale(1) rotate(-6deg); }
+  76%  { opacity: 1; transform: scale(1) rotate(-6deg); }
+  86%  { opacity: 1; transform: scale(1.18) rotate(-2deg); }
+  100% { opacity: 0; transform: scale(0) rotate(-50deg); }
+}
+@keyframes game-clear-ring {
+  0%, 13% { transform: scale(.9); opacity: 0; }
+  16%     { transform: scale(1);  opacity: 1; }
+  46%     { transform: scale(1.55); opacity: 0; }
+  100%    { transform: scale(1.55); opacity: 0; }
+}
+
+/* the card is a flip container; the .card frame lives on each face */
+.karuta-card {
+  position: relative;
+  aspect-ratio: 1;
+  padding: 0;
+  border: 0;
+  background: none;
+  box-shadow: none;
+  overflow: visible;   /* .card's overflow:hidden would clip the face shadows */
+  border-radius: var(--radius);
+  cursor: pointer;
+  perspective: 900px;
+  font: inherit;
+  color: inherit;
+}
+.karuta-card__inner {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  transition: transform .35s ease;
+  transform-style: preserve-3d;
+}
+.karuta-card.is-flipped .karuta-card__inner { transform: rotateY(180deg); }
+
+.karuta-card__back,
+.karuta-card__front {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border: 3px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--bg);
+  overflow: hidden;
+  /* house cartoon offset, matching cards/buttons elsewhere */
+  box-shadow: var(--shadow-sm);
+}
+
+/* back = hinomaru disc, facing forward at rest */
+.karuta-card__back {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.hinomaru {
+  width: 52%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--red);
+}
+
+/* front = costume image only, pre-rotated so it reads when flipped up;
+   the X offset is mirrored so the shadow still falls down-right on screen */
+.karuta-card__front {
+  transform: rotateY(180deg);
+  box-shadow: -4px 4px 0 var(--line);
+}
+.karuta-card__front img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background: var(--bg-2);
+}
+
+/* dealing entrance: each card slides + tilts into its slot, staggered by JS */
+@keyframes karuta-deal {
+  0%   { opacity: 0; transform: translate(-10px, -54px) scale(.84) rotate(-8deg); }
+  60%  { opacity: 1; }
+  100% { opacity: 1; transform: translate(0, 0) scale(1) rotate(0); }
+}
+.karuta-card.is-dealing {
+  animation: karuta-deal .42s cubic-bezier(.22, 1, .36, 1) both;
+  animation-delay: var(--deal-delay, 0ms);
+}
+@media (prefers-reduced-motion: reduce) {
+  .karuta-card.is-dealing { animation: none; }
+}
+
+/* one-shot green circle flash on a correct match */
+.karuta-card.is-correct::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  margin: auto;
+  width: 56%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 5px solid var(--green);
+  background: rgba(159, 203, 142, .35);
+  pointer-events: none;
+  animation: karuta-correct .6s ease-out forwards;
+}
+@keyframes karuta-correct {
+  0%   { transform: scale(.4); opacity: 0; }
+  35%  { transform: scale(1);  opacity: 1; }
+  100% { transform: scale(1.25); opacity: 0; }
+}
+
+/* hover lift only while face-down and still in play */
+.karuta-card:not(.is-flipped):not(.is-matched):hover {
+  transform: translate(-3px, -3px);
+}
+.karuta-card:not(.is-flipped):not(.is-matched):hover .karuta-card__back {
+  box-shadow: 6px 6px 0 var(--line);
+}
+
+/* matched pairs settle and drop out of play */
+.karuta-card.is-matched {
+  cursor: default;
+  pointer-events: none;
+}
+.karuta-card.is-matched .karuta-card__front {
+  box-shadow: inset 0 0 0 3px var(--green), -4px 4px 0 var(--line);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .karuta-card__inner { transition: none; }
+  .karuta-card:not(.is-flipped):not(.is-matched):hover { transform: none; }
+}
+
+/* lightbox */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  background: rgba(43, 43, 43, .82);
+}
+.lightbox.is-open { display: flex; }
+.lightbox img {
+  max-width: min(90vw, 560px);
+  max-height: 86vh;
+  border: 4px solid var(--bg);
+  border-radius: var(--radius);
+  box-shadow: 0 20px 50px rgba(0,0,0,.4);
+}
+.lightbox__close {
+  position: absolute;
+  top: 1.1rem; right: 1.3rem;
+  background: var(--bg);
+  border: 3px solid var(--line);
+  border-radius: 50%;
+  width: 48px; height: 48px;
+  font-size: 1.3rem;
+  cursor: pointer;
+}
+
+/* ---------- Whitelist / puzzle ---------- */
+.wl-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 2.4rem;
+  align-items: start;
+  margin-top: 2.4rem;
+}
+@media (max-width: 880px) { .wl-layout { grid-template-columns: minmax(0, 1fr); } }
+
+.puzzle-panel { text-align: center; }
+
+.puzzle {
+  --gap: 6px;
+  position: relative;   /* anchors the クリア stamp overlay on win */
+  width: min(100%, 360px);
+  aspect-ratio: 1;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: var(--gap);
+  padding: var(--gap);
+  background: var(--ink);
+  border: 4px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  touch-action: manipulation;
+}
+.tile {
+  border: 0;
+  padding: 0;
+  border-radius: 8px;
+  background-size: 300% 300%;
+  background-repeat: no-repeat;
+  cursor: pointer;
+  position: relative;
+  transition: transform .08s ease, filter .12s ease;
+}
+.tile:hover { filter: brightness(1.06); }
+.tile:active { transform: scale(.97); }
+.tile:focus-visible { outline: 3px solid var(--yellow); outline-offset: 2px; }
+.tile.is-blank {
+  background: transparent;
+  cursor: default;
+  box-shadow: inset 0 0 0 2px rgba(255,255,255,.08);
+}
+.tile.is-blank:hover { filter: none; }
+
+/* corner home-position number (hidden until toggled on) */
+.tile__num {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  display: none;
+  min-width: 1.4em;
+  height: 1.4em;
+  padding: 0 .25em;
+  box-sizing: border-box;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-head);
+  font-weight: 700;
+  font-size: .9rem;
+  line-height: 1;
+  color: #fff;
+  background: rgba(20, 18, 28, .72);
+  border-radius: 6px;
+  pointer-events: none;
+}
+.puzzle.show-numbers .tile:not(.is-blank) .tile__num { display: flex; }
+
+.puzzle.is-solved .tile { cursor: default; }
+
+.puzzle-controls {
+  display: flex;
+  gap: .6rem;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 1.2rem;
+}
+.moves { font-family: var(--font-head); font-weight: 600; }
+/* space is reserved while hidden so the puzzle column — and the door card
+   stretched to match it — doesn't grow mid-unlock */
+.solved-badge {
+  visibility: hidden;
+  margin-top: 1rem;
+  font-family: var(--font-head);
+  font-weight: 600;
+  color: var(--green);
+}
+.solved-badge.show { visibility: visible; }
+.thumb-hint {
+  width: 130px;
+  border: 2px solid var(--line);
+  border-radius: 8px;
+  margin: .9rem auto 0;
+  cursor: zoom-in;
+  transition: transform .12s ease;
+}
+.thumb-hint:hover { transform: scale(1.04); }
+.thumb-hint:focus-visible { outline: 3px solid var(--yellow); outline-offset: 2px; }
+
+/* full-size reference lightbox */
+.thumb-zoom {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 5vmin;
+  background: rgba(20, 18, 28, .82);
+  cursor: zoom-out;
+}
+.thumb-zoom.is-open { display: flex; }
+.thumb-zoom img {
+  max-width: min(92vw, 560px);
+  max-height: 90vh;
+  border: 4px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+/* form, locked until solved. The card is kept door-shaped — narrow, centered
+   in its column, stretched to the puzzle column's height — so the door can
+   fill it edge-to-edge and the card border reads as the door frame. */
+.wl-form-wrap {
+  position: relative;
+  width: min(100%, 440px);
+  justify-self: center;
+  align-self: stretch;
+  /* let the tilted hanger tag overhang the door edge instead of being clipped;
+     the door rounds its own corners (.card normally clips them) */
+  overflow: visible;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.lock-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  border-radius: var(--radius);
+  font-family: var(--font-head);
+  /* the stage the door swings on */
+  perspective: 1300px;
+}
+
+/* the magic changing-room door (fills the whole card).
+   Drawn after the show's fitting-room door: pastel-green watercolor,
+   four equal panels, fine dark-green linework. */
+.door {
+  --door-line: #4E7A39;
+  position: absolute;
+  inset: 0;
+  /* round the corners to sit flush inside the card's 3px border */
+  border-radius: calc(var(--radius) - 3px);
+  display: grid;
+  grid-template: 1fr 1fr / 1fr 1fr;
+  gap: 1.1rem;
+  /* extra room on the right for the knob, like a real stile */
+  padding: 1.5rem 3.2rem 1.5rem 1.5rem;
+  /* watercolor wash: uneven light/dark patches over the flat green */
+  background:
+    radial-gradient(46% 32% at 22% 16%, rgba(255, 255, 255, .20), transparent 70%),
+    radial-gradient(52% 40% at 76% 62%, rgba(255, 255, 255, .16), transparent 70%),
+    radial-gradient(44% 30% at 62% 28%, rgba(58, 94, 34, .12), transparent 70%),
+    radial-gradient(40% 34% at 28% 80%, rgba(58, 94, 34, .14), transparent 70%),
+    var(--green);
+  transform-origin: left center;
+  transition: transform .9s cubic-bezier(.66, 0, .34, 1);
+  backface-visibility: hidden;
+  will-change: transform;
+}
+/* panel molding: two fine green lines with the door colour between */
+.door__panel {
+  position: relative;
+  border: 2px solid var(--door-line);
+  border-radius: 4px;
+  box-shadow: inset 2px 3px 6px rgba(58, 94, 34, .22);
+}
+.door__panel::after {
+  content: '';
+  position: absolute;
+  inset: 5px;
+  border: 2px solid var(--door-line);
+  border-radius: 2px;
+  opacity: .85;
+}
+/* ring knob with the keyhole just below, as in the show */
+.door__knob {
+  position: absolute;
+  right: .85rem;
+  top: 52%;
+  width: 30px;
+  height: 30px;
+  translate: 0 -50%;
+  background: rgba(255, 255, 255, .18);
+  border: 3px solid var(--door-line);
+  border-radius: 50%;
+}
+.door__knob::after {
+  content: '';
+  position: absolute;
+  inset: 6px;
+  border: 3px solid var(--door-line);
+  border-radius: 50%;
+}
+.door__keyhole {
+  position: absolute;
+  right: calc(.85rem + 9px);
+  top: calc(52% + 26px);
+  width: 12px;
+  height: 18px;
+  border: 2px solid var(--door-line);
+  border-radius: 50% 50% 42% 42%;
+}
+.door__keyhole::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  translate: -50% -50%;
+  width: 4px;
+  height: 9px;
+  background: var(--door-line);
+  border-radius: 2px;
+}
+/* "no entry" hanger tag looped over the door knob; swings away with the door.
+   The hanger hole is a real punch-through (mask), so the door shows through it. */
+.door__sign {
+  --hole-x: calc(100% - 22px); /* hole centre, from the tag's own left edge */
+  --hole-y: 16px;
+  position: absolute;
+  /* hangs on a string below the knob (knob centre: right .85rem + 15px, top 52%) */
+  right: calc(.85rem - 7px);
+  top: calc(52% + 44px);
+  width: 158px;
+  padding: 2rem .9rem 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: .35rem;
+  align-items: center;
+  text-align: center;
+  background: var(--bg);
+  border: 3px solid var(--line);
+  border-radius: 12px;
+  box-shadow: var(--shadow-sm);
+  font-weight: 700;
+  font-size: 1.05rem;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  rotate: -6deg;
+  transform-origin: var(--hole-x) var(--hole-y);
+  -webkit-mask: radial-gradient(circle at var(--hole-x) var(--hole-y), transparent 7px, #000 8px);
+  mask: radial-gradient(circle at var(--hole-x) var(--hole-y), transparent 7px, #000 8px);
+}
+/* the string: from inside the knob ring down through the tag's hanger hole.
+   A sibling of the tag, so it stays vertical while the tag tilts, and its
+   end peeks through the punched hole. */
+.door__string {
+  position: absolute;
+  right: calc(.85rem + 13.5px);
+  top: calc(52% + 10px);
+  width: 3px;
+  height: 50px;
+  background: var(--line);
+  border-radius: 2px;
+}
+/* classic no-entry roundel, drawn — not an emoji */
+.door__sign-roundel {
+  width: 38px;
+  height: 38px;
+  border: 2px solid var(--line);
+  border-radius: 50%;
+  background: linear-gradient(#fff, #fff) center / 22px 6px no-repeat, var(--red);
+}
+.door__sign-sub {
+  font-weight: 400;
+  font-size: .72rem;
+  text-transform: none;
+  letter-spacing: normal;
+  opacity: .7;
+}
+
+/* unlock: door swings open, vanishes edge-on (backface), overlay cleans up */
+.wl-form-wrap.is-unlocked .lock-overlay {
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .4s ease .6s, visibility 0s 1.05s;
+}
+.wl-form-wrap.is-unlocked .door { transform: rotateY(-108deg); }
+
+/* the shopkeeper (true alpha cutout): sits at z-index -1 so the card body
+   hides most of him and its right edge reads as the door jamb he's peeking
+   around — far enough out that one lens and the fez clear the edge. */
+.door-shopkeeper {
+  position: absolute;
+  z-index: -1;
+  bottom: 6px;   /* feet on the card's floor line */
+  right: -5.6rem;
+  width: 225px;
+  height: auto;
+  transform: translateX(-115%);   /* fully tucked behind the card */
+  transition: transform .8s cubic-bezier(.34, 1.3, .4, 1) .5s;
+  pointer-events: none;
+  user-select: none;
+}
+.wl-form-wrap.is-unlocked .door-shopkeeper { transform: translateX(0) rotate(4deg); }
+/* on mid-size viewports the peek can reach past the page edge — trim it
+   there instead of growing a horizontal scrollbar. (on main, not body:
+   body overflow propagates to the viewport and loses the clip) */
+.page-whitelist main { overflow-x: clip; }
+@media (max-width: 880px) {
+  /* stacked layout: smaller peek so he stays inside the page margin */
+  .door-shopkeeper { width: 150px; right: -1.4rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .door { transition: none; }
+  .wl-form-wrap.is-unlocked .lock-overlay { display: none; }
+  .door-shopkeeper { transition: none; }
+}
+
+.form {
+  display: grid;
+  gap: 1rem;
+}
+.form label {
+  font-family: var(--font-head);
+  font-weight: 500;
+  font-size: .95rem;
+  display: block;
+  margin-bottom: .3rem;
+}
+.form input {
+  width: 100%;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  padding: .75rem .9rem;
+  border: 3px solid var(--line);
+  border-radius: 12px;
+  background: var(--bg);
+}
+.form input:focus { outline: 3px solid var(--blue); outline-offset: 1px; }
+.form .hint { font-size: .82rem; opacity: .7; margin: .2rem 0 0; }
+
+.form-success {
+  display: none;
+  text-align: center;
+  padding: 1.4rem;
+}
+.form-success.show { display: block; }
+.form-success .big { font-size: 3rem; }
+
+/* ---------- Whitelist X steps ---------- */
+.wl-steps {
+  list-style: none;
+  margin: 1.2rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: .9rem;
+}
+.wl-step {
+  display: flex;
+  align-items: center;
+  gap: .9rem;
+  padding: .9rem 1rem;
+  background: var(--bg);
+  border: 3px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  transition: background .15s ease, border-color .15s ease;
+}
+.wl-step__num {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  border: 3px solid var(--line);
+  background: var(--yellow);
+  font-family: var(--font-head);
+  font-weight: 700;
+}
+.wl-step__body { flex: 1 1 auto; min-width: 0; }
+.wl-step__label {
+  font-family: var(--font-head);
+  font-weight: 500;
+  margin: 0 0 .6rem;
+}
+.wl-step__go {
+  font-size: .95rem;
+  padding: .6rem 1.1rem;
+}
+.wl-step__check {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: .35rem;
+  font-family: var(--font-head);
+  font-size: .85rem;
+  cursor: pointer;
+  user-select: none;
+}
+.wl-step__check input { width: 20px; height: 20px; cursor: pointer; accent-color: var(--green); }
+.wl-step__check input:disabled { cursor: not-allowed; }
+
+/* ticked-off state */
+.wl-step.is-done {
+  background: rgba(159, 203, 142, .28);
+  border-color: var(--green);
+}
+.wl-step.is-done .wl-step__num { background: var(--green); }
+.wl-step.is-done .wl-step__label { text-decoration: line-through; opacity: .7; }
+
+@media (max-width: 480px) {
+  .wl-step { flex-wrap: wrap; }
+  .wl-step__check { margin-left: calc(34px + .9rem); }
+}
+
+/* ---------- Reveal-on-scroll ----------
+   The .reveal class is added by js/nav.js, so with JS off nothing is ever
+   hidden. Blocks drift up + fade; known grid children stagger within. */
+.reveal {
+  opacity: 0;
+  transform: translateY(38px) scale(.97);
+  transition: opacity .7s cubic-bezier(.22, 1, .36, 1),
+              transform .7s cubic-bezier(.22, 1, .36, 1);
+  will-change: opacity, transform;
+}
+.reveal.is-in { opacity: 1; transform: none; }
+
+/* staggered children — transform only, opacity inherited from the block.
+   translate + box-shadow stay in the list (with 0s delays below) so the
+   hover pop on .ref-grid .card keeps its own fast timing. */
+.reveal .ref-grid figure {
+  transform: translateY(26px);
+  transition: transform .6s cubic-bezier(.22, 1, .36, 1),
+              translate .16s ease, box-shadow .16s ease;
+}
+.reveal.is-in .ref-grid figure { transform: none; }
+.reveal.is-in .ref-grid figure:nth-child(2) { transition-delay: .12s, 0s, 0s; }
+.reveal.is-in .ref-grid figure:nth-child(3) { transition-delay: .24s, 0s, 0s; }
+.reveal.is-in .ref-grid figure:nth-child(4) { transition-delay: .36s, 0s, 0s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .reveal .ref-grid figure { opacity: 1; transform: none; transition: none; }
+}
+
+/* ---------- Footer ---------- */
+.footer {
+  border-top: 3px solid var(--line);
+  background: var(--bg-2);
+  margin-top: auto;   /* pushed to the viewport bottom on short pages */
+  padding-top: 0;
+}
+/* seigaiha (青海波) wave band — the classic "finishing edge".
+   Inline SVG tile: three staggered rows of concentric scales; ink outer
+   ring + cream inner rings on the site blue. */
+.footer::before {
+  content: "";
+  display: block;
+  height: 44px;
+  border-bottom: 3px solid var(--line);
+  background-color: var(--blue);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='44'%3E%3Crect width='48' height='44' fill='%238FC5E8'/%3E%3Cdefs%3E%3Cg id='s' fill='%238FC5E8'%3E%3Ccircle r='21' stroke='%232B2B2B' stroke-width='3'/%3E%3Ccircle r='14' fill='none' stroke='%23FBF7EF' stroke-width='3'/%3E%3Ccircle r='7' fill='none' stroke='%23FBF7EF' stroke-width='3'/%3E%3C/g%3E%3C/defs%3E%3Cuse href='%23s' x='0' y='24'/%3E%3Cuse href='%23s' x='48' y='24'/%3E%3Cuse href='%23s' x='24' y='34'/%3E%3Cuse href='%23s' x='0' y='44'/%3E%3Cuse href='%23s' x='48' y='44'/%3E%3C/svg%3E");
+  background-repeat: repeat-x;
+  background-position: bottom center;
+  background-size: 48px 44px;
+}
+.footer__inner {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2.4rem 0;
+}
+/* brand block + hanko seal side by side */
+.footer__id {
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+}
+/* artist's seal: 紅丸 stacked vertically in a red-stamped frame */
+.hanko {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  writing-mode: vertical-rl;
+  padding: .4em .16em;
+  font-family: "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", serif;
+  font-weight: 700;
+  font-size: 1.05rem;
+  line-height: 1;
+  letter-spacing: .12em;
+  color: var(--red);
+  border: 3px solid var(--red);
+  border-radius: 6px;
+  transform: rotate(-4deg);
+  user-select: none;
+}
+.footer a { text-decoration: none; font-family: var(--font-head); }
+.footer__social { display: flex; gap: .6rem; }
+.footer__social a {
+  border: 3px solid var(--line);
+  background: var(--bg);
+  border-radius: 999px;
+  padding: .4rem 1rem;
+  box-shadow: var(--shadow-sm);
+}
+.muted { opacity: .7; font-size: .9rem; }
+
+/* ---------- Liquid goo / bloom ----------
+   Gooey "metaball" effects: elements under an SVG blur+threshold filter
+   merge like water droplets. js/goo.js injects the filters and adds
+   .goo-ready to <html>; everything below is gated on that class so with
+   JS off the site renders exactly as before (no stray un-gooed circles). */
+
+/* --- button bloom (.btn--goo) ---
+   The button's own border/background go transparent and a filtered child
+   layer draws the pill + droplets; #goo-ink re-synthesizes the 3px ink
+   outline around the merged silhouette, so a droplet swelling out of the
+   pill shares one continuous cartoon outline with it. The hard offset
+   box-shadow and the hover lift / active press stay on the outer .btn. */
+.btn--goo { position: relative; isolation: isolate; }
+.btn--goo .btn__label { position: relative; }
+.btn__goo { display: none; }
+.goo-ready .btn--goo {
+  border-color: transparent;
+  background: transparent;
+}
+.goo-ready .btn__goo {
+  display: block;
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  filter: url(#goo-ink);
+  pointer-events: none;
+}
+/* inset 3px: the filter's dilate(3) outline lands where the border was */
+.btn__goo-pill {
+  position: absolute;
+  inset: 3px;
+  border-radius: 999px;
+  background: var(--goo-fill, var(--blue));
+}
+.btn--goo.btn--primary { --goo-fill: var(--orange); }
+.btn--goo.btn--purple  { --goo-fill: var(--purple); }
+.btn--goo.btn--ghost   { --goo-fill: var(--bg); }
+
+/* droplets: parked at the pill edge at scale(0); each carries its own
+   bob direction via --dx/--dy so one keyframe serves all three */
+.btn__goo i {
+  position: absolute;
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  background: var(--goo-fill, var(--blue));
+  transform: scale(0);
+  transition: transform .25s ease;
+}
+.btn__goo i:nth-child(2) { top: 2px; right: 12%; --dx: 4px;  --dy: -13px; }
+.btn__goo i:nth-child(3) { bottom: 2px; left: 16%; width: 11px; height: 11px; --dx: -3px; --dy: 12px; }
+.btn__goo i:nth-child(4) { top: 3px; left: 34%;  width: 12px; height: 12px; --dx: 2px;  --dy: -11px; }
+.btn--goo:hover .btn__goo i,
+.btn--goo:focus-visible .btn__goo i {
+  animation: goo-drip 1.8s ease-in-out infinite;
+}
+.btn--goo:hover .btn__goo i:nth-child(3),
+.btn--goo:focus-visible .btn__goo i:nth-child(3) { animation-delay: .45s; }
+.btn--goo:hover .btn__goo i:nth-child(4),
+.btn--goo:focus-visible .btn__goo i:nth-child(4) { animation-delay: .9s; }
+@keyframes goo-drip {
+  0%   { transform: translate(0, 0) scale(0); }
+  35%  { transform: translate(var(--dx, 3px), var(--dy, -12px)) scale(1); }
+  70%  { transform: translate(calc(var(--dx, 3px) / 2), calc(var(--dy, -12px) * 1.2)) scale(.7); }
+  100% { transform: translate(0, 0) scale(0); }
+}
+
+/* --- gooey nav indicator ---
+   js/goo.js adds .nav-goo-on only when the indicator actually runs
+   (fine pointer, no reduced-motion), and positions the two pills; their
+   different lags stretch the merged blob between links. */
+.nav__inner { position: relative; }
+.nav__goo { display: none; }
+.nav-goo-on .nav__goo {
+  display: block;
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  filter: url(#goo);
+  pointer-events: none;
+}
+.nav__goo i {
+  position: absolute;
+  border-radius: 999px;
+  background: var(--bg-2);
+  transform: scale(0);
+  transition: left .28s cubic-bezier(.5, .05, .3, 1),
+              top .28s cubic-bezier(.5, .05, .3, 1),
+              width .28s cubic-bezier(.5, .05, .3, 1),
+              height .28s cubic-bezier(.5, .05, .3, 1),
+              transform .2s ease;
+}
+.nav__goo i:last-child {
+  transition-duration: .45s, .45s, .45s, .45s, .2s;
+}
+/* text and controls paint above the blob */
+.nav-goo-on .nav__brand,
+.nav-goo-on .nav__links,
+.nav-goo-on .lang-toggle { position: relative; z-index: 1; }
+/* the blob replaces the static hover fills on desktop */
+@media (min-width: 761px) {
+  .nav-goo-on .nav__links a:hover { background: transparent; }
+  .nav-goo-on .lang-toggle:hover { background: transparent; }
+}
+
+/* --- hero blob field (index only) ---
+   Slow paper-toned metaballs drifting behind the hero; the static
+   radial-gradient wash on .hero stays as the base/fallback layer.
+   NOTE: fills must be opaque pre-mixed tints — low-alpha rgba() dies
+   under the filter's alpha-contrast step. */
+.hero__goo { display: none; }
+.goo-ready .hero__goo {
+  display: block;
+  position: absolute;
+  inset: -40px;
+  z-index: 0;
+  filter: url(#goo-soft);
+  pointer-events: none;
+}
+.hero__goo i {
+  position: absolute;
+  border-radius: 50%;
+}
+/* big corner blobs */
+.hero__goo i:nth-child(1) { width: 440px; height: 440px; left: 4%;   top: -140px;   background: #C5DEEC; animation: goo-drift-a 80s ease-in-out infinite alternate; }
+.hero__goo i:nth-child(2) { width: 320px; height: 320px; right: 4%;  top: -60px;    background: #F8E4AD; animation: goo-drift-b 95s ease-in-out infinite alternate; }
+.hero__goo i:nth-child(3) { width: 380px; height: 380px; left: -40px; bottom: 6%;   background: #F6CCCB; animation: goo-drift-b 70s ease-in-out infinite alternate-reverse; }
+.hero__goo i:nth-child(4) { width: 300px; height: 300px; right: -30px; bottom: -60px; background: #BDE2D8; animation: goo-drift-a 88s ease-in-out infinite alternate-reverse; }
+/* smaller drifters — kept in the side corridors beside the hero card
+   (the card is opaque, so centered bubbles would hide behind it), and
+   placed clear of the corner blobs *including* their ~90px drift travel
+   so each bubble reads as its own droplet rather than a blob-in-blob.
+   Faster cycles + negative delays so each starts mid-journey. */
+.hero__goo i:nth-child(5) { width: 150px; height: 150px; left: 8%;   top: 470px;  background: #CDE1BF; animation: goo-drift-b 58s ease-in-out -22s infinite alternate; }
+.hero__goo i:nth-child(6) { width: 110px; height: 110px; right: 8%;  top: 430px;  background: #C5DEEC; animation: goo-drift-a 52s ease-in-out -36s infinite alternate-reverse; }
+.hero__goo i:nth-child(7) { width: 95px;  height: 95px;  left: 4%;   top: 760px;  background: #F8E4AD; animation: goo-drift-a 64s ease-in-out -48s infinite alternate; }
+.hero__goo i:nth-child(8) { width: 130px; height: 130px; right: 4%;  top: 700px;  background: #F6CCCB; animation: goo-drift-b 74s ease-in-out -12s infinite alternate-reverse; }
+@keyframes goo-drift-a {
+  from { transform: translate(0, 0) scale(1); }
+  to   { transform: translate(90px, 45px) scale(1.18); }
+}
+@keyframes goo-drift-b {
+  from { transform: translate(0, 0) scale(1.1); }
+  to   { transform: translate(-75px, 55px) scale(.92); }
+}
+
+/* --- subpage bubble band (inspiration / collection / whitelist / 404) ---
+   A lighter echo of the hero field behind each page-head. The outer div
+   clips like .hero does (post-filter, so bubbles read as bleeding off the
+   page); the inner field carries the filter. z-index -1 keeps the bubbles
+   behind all content but above the paper background. */
+main { position: relative; }
+.page-goo { display: none; }
+.goo-ready .page-goo {
+  display: block;
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: min(64vh, 560px);
+  overflow: hidden;
+  z-index: -1;
+  pointer-events: none;
+}
+.page-goo__field {
+  position: absolute;
+  inset: -40px;
+  filter: url(#goo-soft);
+}
+.page-goo__field i { position: absolute; border-radius: 50%; }
+.page-goo__field i:nth-child(1) { width: 200px; height: 200px; left: 2%;  top: 30px;  background: #C5DEEC; animation: goo-drift-a 72s ease-in-out -18s infinite alternate; }
+.page-goo__field i:nth-child(2) { width: 140px; height: 140px; right: 3%; top: 90px;  background: #F8E4AD; animation: goo-drift-b 60s ease-in-out -40s infinite alternate; }
+.page-goo__field i:nth-child(3) { width: 110px; height: 110px; left: 7%;  top: 340px; background: #F6CCCB; animation: goo-drift-b 66s ease-in-out -8s infinite alternate-reverse; }
+
+/* wider screens: the side corridors grow with the viewport while the
+   bubbles stay fixed-size, so bump them to keep the field density */
+@media (min-width: 1600px) {
+  .hero__goo i:nth-child(1) { width: 530px; height: 530px; }
+  .hero__goo i:nth-child(2) { width: 390px; height: 390px; }
+  .hero__goo i:nth-child(3) { width: 460px; height: 460px; }
+  .hero__goo i:nth-child(4) { width: 360px; height: 360px; }
+  .hero__goo i:nth-child(5) { width: 185px; height: 185px; }
+  .hero__goo i:nth-child(6) { width: 135px; height: 135px; }
+  .hero__goo i:nth-child(7) { width: 115px; height: 115px; }
+  .hero__goo i:nth-child(8) { width: 160px; height: 160px; }
+  .page-goo__field i:nth-child(1) { width: 240px; height: 240px; }
+  .page-goo__field i:nth-child(2) { width: 170px; height: 170px; }
+  .page-goo__field i:nth-child(3) { width: 135px; height: 135px; }
+}
+
+/* --- whitelist micro-interactions (plain CSS squash-and-stretch;
+   classes are already toggled by js/puzzle.js) --- */
+
+/* step number pops like a droplet when the step is ticked off */
+.wl-step.is-done .wl-step__num {
+  animation: goo-pop .45s cubic-bezier(.34, 1.56, .64, 1);
+}
+@keyframes goo-pop {
+  0%   { transform: scale(1); }
+  30%  { transform: scale(1.3, .8); }
+  60%  { transform: scale(.9, 1.15); }
+  100% { transform: scale(1); }
+}
+
+/* one-shot ripple ring around the checkbox on tick */
+.wl-step__check { position: relative; }
+.wl-step.is-done .wl-step__check::after {
+  content: "";
+  position: absolute;
+  left: 0; top: 50%;
+  width: 20px; height: 20px;
+  margin-top: -10px;
+  border: 3px solid var(--green);
+  border-radius: 999px;
+  pointer-events: none;
+  animation: goo-ripple .5s ease-out forwards;
+}
+@keyframes goo-ripple {
+  from { transform: scale(.4); opacity: 1; }
+  to   { transform: scale(1.8); opacity: 0; }
+}
+
+/* checkboxes wake with a stagger when the puzzle unlocks the form */
+.wl-form-wrap.is-unlocked .wl-step__check input {
+  animation: goo-wake .4s ease backwards;
+}
+.wl-form-wrap.is-unlocked .wl-step:nth-child(2) .wl-step__check input { animation-delay: .12s; }
+.wl-form-wrap.is-unlocked .wl-step:nth-child(3) .wl-step__check input { animation-delay: .24s; }
+@keyframes goo-wake {
+  0%   { transform: scale(.6); }
+  60%  { transform: scale(1.25); }
+  100% { transform: scale(1); }
+}
+
+/* matched karuta pairs pop like a droplet — slight delay so the card
+   flip lands first (goo-pop starts at scale(1), so `backwards` is a
+   no-op during the wait) */
+.karuta-card.is-matched {
+  animation: goo-pop .45s cubic-bezier(.34, 1.56, .64, 1) .18s backwards;
+}
+
+/* TV power knob: droplet-pop on power-on. The knob's on-state is
+   rotate(45deg), so the squash keyframes carry the rotation with them
+   to avoid a snap when the animation hands back to the static rule. */
+.tv-row.is-on .tv__power {
+  animation: goo-knob .5s cubic-bezier(.34, 1.56, .64, 1);
+}
+@keyframes goo-knob {
+  0%   { transform: scale(1) rotate(0deg); }
+  40%  { transform: scale(1.35, .85) rotate(45deg); }
+  70%  { transform: scale(.9, 1.12) rotate(45deg); }
+  100% { transform: scale(1) rotate(45deg); }
+}
+/* one-shot red ripple ring around the knob (::before is the notch) */
+.tv-row.is-on .tv__power::after {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  border: 3px solid var(--red);
+  border-radius: 50%;
+  pointer-events: none;
+  animation: goo-ripple .55s ease-out forwards;
+}
+
+/* puzzle tiles settle like a droplet after each slide (.just-moved is
+   added by js/puzzle.js), and the solved board wobbles once */
+.tile.just-moved {
+  animation: goo-settle .28s cubic-bezier(.34, 1.56, .64, 1);
+}
+@keyframes goo-settle {
+  0%   { transform: scale(1.06, .9); }
+  60%  { transform: scale(.96, 1.05); }
+  100% { transform: scale(1); }
+}
+.puzzle.is-solved {
+  animation: goo-jelly .6s cubic-bezier(.34, 1.56, .64, 1);
+}
+@keyframes goo-jelly {
+  0%   { transform: scale(1); }
+  25%  { transform: scale(1.02, .97); }
+  55%  { transform: scale(.985, 1.015); }
+  100% { transform: scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* hero + page-head blobs off — the static wash on .hero remains */
+  .goo-ready .hero__goo,
+  .goo-ready .page-goo { display: none; }
+  /* pill + ink outline still render; droplets stay parked at scale(0) */
+  .btn--goo:hover .btn__goo i,
+  .btn--goo:focus-visible .btn__goo i,
+  .wl-step.is-done .wl-step__num,
+  .wl-form-wrap.is-unlocked .wl-step__check input,
+  .tile.just-moved,
+  .puzzle.is-solved,
+  .karuta-card.is-matched,
+  .tv-row.is-on .tv__power { animation: none; }
+  /* animation:none would freeze the ripples visible — remove them instead */
+  .wl-step.is-done .wl-step__check::after,
+  .tv-row.is-on .tv__power::after { content: none; }
+}

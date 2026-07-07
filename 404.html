@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>404 — Mr Benimaru</title>
+  <meta name="description" content="This door leads nowhere. Head back through the changing-room door." />
+  <meta name="robots" content="noindex" />
+
+  <!-- hinomaru favicon (inline SVG — no extra file) -->
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='42' fill='%23E5352B' stroke='%232B2B2B' stroke-width='8'/%3E%3C/svg%3E" />
+  <meta name="theme-color" content="#FBF7EF" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,500..700,50&family=EB+Garamond:ital,wght@0,400..700;1,400..700&family=Zen+Maru+Gothic:wght@400;500;700&display=swap" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main" data-i18n="nav.skip">Skip to content</a>
+
+  <!-- ===== NAV ===== -->
+  <header class="nav">
+    <div class="nav__inner">
+      <a class="nav__brand" href="index.html">
+        <span class="dot"></span> MR BENIMARU
+      </a>
+      <button class="nav__toggle" aria-label="Menu" aria-expanded="false" aria-controls="nav-links">☰</button>
+      <ul class="nav__links" id="nav-links">
+        <li><a href="index.html" data-i18n="nav.home">Home</a></li>
+        <li><a href="inspiration.html" data-i18n="nav.inspiration">Inspiration</a></li>
+        <li><a href="collection.html" data-i18n="nav.collection">Collection</a></li>
+        <li><a href="whitelist.html" data-i18n="nav.whitelist">Whitelist</a></li>
+        <li><a href="https://x.com/MrBenimarusays" target="_blank" rel="noopener">X / Twitter</a></li>
+      </ul>
+      <button class="lang-toggle" id="lang-toggle" type="button" aria-label="Switch to Japanese" title="日本語 / English">
+        <span class="lang-toggle__flag">🇯🇵</span>
+        <span class="lang-toggle__label">日本語</span>
+      </button>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- ambient liquid bubbles behind the page head — decorative, hidden without js/goo.js -->
+    <div class="page-goo" aria-hidden="true"><div class="page-goo__field"><i></i><i></i><i></i></div></div>
+    <div class="page-head wrap">
+      <p class="eyebrow" data-i18n="nf.eyebrow">No costume found</p>
+      <div style="font-size:4rem; line-height:1; margin-bottom:.4rem;" aria-hidden="true">🎩🚪</div>
+      <h1 data-i18n="nf.h1">This door leads nowhere</h1>
+      <p class="lead center" style="margin-inline:auto;" data-i18n="nf.lead">
+        The page you're after seems to have wandered off on an adventure of its own.
+        Head back through the changing-room door.
+      </p>
+      <p style="margin-top:1.6rem;">
+        <a class="btn btn--primary btn--goo" href="index.html">
+          <span class="btn__goo" aria-hidden="true"><span class="btn__goo-pill"></span><i></i><i></i><i></i></span>
+          <span class="btn__label" data-i18n="nf.cta">Back to Home →</span>
+        </a>
+      </p>
+    </div>
+  </main>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="footer__inner wrap">
+      <div class="footer__id">
+        <div>
+          <a href="index.html" class="nav__brand"><span class="dot"></span> MR BENIMARU</a>
+          <p class="muted" style="margin:.4rem 0 0;" data-i18n="footer.copy">© 2026 Mr Benimaru. As seen on the changing-room door.</p>
+        </div>
+        <span class="hanko" aria-hidden="true">紅丸</span>
+      </div>
+      <nav class="footer__social" aria-label="Social links">
+        <a href="https://x.com/MrBenimarusays" target="_blank" rel="noopener">X / Twitter</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script src="js/nav.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/goo.js"></script>
+</body>
+</html>

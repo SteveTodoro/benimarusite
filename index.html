@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mr Benimaru — A Nostalgic Costume Adventure, On-Chain</title>
+  <meta name="description" content="Mr Benimaru is a pastel, retro NFT collection inspired by the 1970s adventures of Mr Benn. Explore the collection and join the whitelist." />
+
+  <!-- social share cards — TODO before launch: replace SITE_URL with the real domain -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Mr Benimaru" />
+  <meta property="og:title" content="Mr Benimaru — A Nostalgic Costume Adventure, On-Chain" />
+  <meta property="og:description" content="A pastel, retro NFT collection inspired by the 1970s adventures of Mr Benn. Explore the collection and join the whitelist." />
+  <meta property="og:url" content="https://SITE_URL/index.html" />
+  <meta property="og:image" content="https://SITE_URL/Assets/Pics/og-card.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@MrBenimarusays" />
+
+  <!-- hinomaru favicon (inline SVG — no extra file) -->
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='42' fill='%23E5352B' stroke='%232B2B2B' stroke-width='8'/%3E%3C/svg%3E" />
+  <meta name="theme-color" content="#FBF7EF" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,500..700,50&family=EB+Garamond:ital,wght@0,400..700;1,400..700&family=Zen+Maru+Gothic:wght@400;500;700&display=swap" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main" data-i18n="nav.skip">Skip to content</a>
+
+  <!-- ===== NAV (keep identical across pages) ===== -->
+  <header class="nav">
+    <div class="nav__inner">
+      <a class="nav__brand" href="index.html">
+        <span class="dot"></span> MR BENIMARU
+      </a>
+      <button class="nav__toggle" aria-label="Menu" aria-expanded="false" aria-controls="nav-links">☰</button>
+      <ul class="nav__links" id="nav-links">
+        <li><a href="index.html" data-i18n="nav.home">Home</a></li>
+        <li><a href="inspiration.html" data-i18n="nav.inspiration">Inspiration</a></li>
+        <li><a href="collection.html" data-i18n="nav.collection">Collection</a></li>
+        <li><a href="whitelist.html" data-i18n="nav.whitelist">Whitelist</a></li>
+        <li><a href="https://x.com/MrBenimarusays" target="_blank" rel="noopener">X / Twitter</a></li>
+      </ul>
+      <button class="lang-toggle" id="lang-toggle" type="button" aria-label="Switch to Japanese" title="日本語 / English">
+        <span class="lang-toggle__flag">🇯🇵</span>
+        <span class="lang-toggle__label">日本語</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ===== HERO ===== -->
+  <main id="main">
+  <section class="hero">
+    <!-- ambient liquid blobs (gooey filter) — decorative, hidden without js/goo.js:
+         four big corner blobs + four smaller drifters that merge with them -->
+    <div class="hero__goo" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    <div class="hero__inner wrap">
+      <img class="hero__logo" src="Assets/Pics/banners/mr_benimaru_banner_v2.jpg" alt="Mr Benimaru"
+           width="1520" height="1013" fetchpriority="high" />
+      <h1 class="hero__tagline" data-i18n="home.lead">One man, 71 costumes, lovingly hand-coded in p5.js.</h1>
+      <div class="hero__cta">
+        <!-- single CTA: the whitelist is the one action that matters pre-launch
+             (the nav covers Collection). goo button: data-i18n lives on the inner
+             label span — i18n.js swaps innerHTML, which would wipe the goo layer
+             if it sat on the <a> -->
+        <a class="btn btn--primary btn--goo" href="whitelist.html">
+          <span class="btn__goo" aria-hidden="true"><span class="btn__goo-pill"></span><i></i><i></i><i></i></span>
+          <span class="btn__label" data-i18n="cta.whitelist">Join the Whitelist</span>
+        </a>
+      </div>
+
+      <!-- stat strip removed until mint details are decided — the .stats /
+           .stat styles are kept in css/styles.css for when it returns -->
+      <p class="launch-badge" data-i18n="home.launch">🌊 Launching soon on OpenSea</p>
+
+      <div class="tv-row" data-tv>
+        <!-- vintage 1970s walnut colour TV — plug it in (below) to power on the CRT -->
+        <div class="tv">
+          <div class="tv__screen">
+            <!-- src is empty until powered on; JS swaps in data-gif so the GIF starts from frame 1 -->
+            <img class="tv__pic"
+                 src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
+                 data-gif="Assets/benimaru-cycle.gif"
+                 alt="Mr Benimaru cycling through his many costumes" />
+            <span class="tv__off" aria-hidden="true"></span>
+          </div>
+          <div class="tv__panel">
+            <span class="tv__brand" aria-hidden="true">紅丸</span>
+            <!-- red power knob: click to turn the TV on/off -->
+            <button class="tv__power" type="button" aria-pressed="false"
+                    aria-label="Turn the TV on" data-tv-power></button>
+            <span class="tv__knob" aria-hidden="true"></span>
+            <span class="tv__grille" aria-hidden="true"></span>
+          </div>
+        </div>
+
+        <!-- PRESERVED FOR REUSE — decorative waribashi chopsticks in a hinomaru sleeve.
+             Paired CSS lives (commented) in css/styles.css under "Chopsticks (preserved…)".
+        <div class="chopsticks" aria-hidden="true">
+          <span class="chopstick"></span>
+          <span class="chopstick"></span>
+          <span class="hashibukuro">
+            <span class="hashibukuro__kanji">紅</span>
+            <span class="hashibukuro__sun"></span>
+            <span class="hashibukuro__kanji">丸</span>
+          </span>
+        </div>
+        -->
+      </div>
+    </div>
+  </section>
+  </main>
+
+  <!-- ===== FOOTER (keep identical across pages) ===== -->
+  <footer class="footer">
+    <div class="footer__inner wrap">
+      <div class="footer__id">
+        <div>
+          <a href="index.html" class="nav__brand"><span class="dot"></span> MR BENIMARU</a>
+          <p class="muted" style="margin:.4rem 0 0;" data-i18n="footer.copy">© 2026 Mr Benimaru. As seen on the changing-room door.</p>
+        </div>
+        <span class="hanko" aria-hidden="true">紅丸</span>
+      </div>
+      <nav class="footer__social" aria-label="Social links">
+        <!-- PLACEHOLDER links -->
+        <a href="https://x.com/MrBenimarusays" target="_blank" rel="noopener">X / Twitter</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script src="js/nav.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/goo.js"></script>
+  <script src="js/tv.js"></script>
+</body>
+</html>
