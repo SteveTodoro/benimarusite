@@ -60,7 +60,7 @@
     <div class="hero__inner wrap">
       <img class="hero__logo" src="Assets/Pics/banners/mr_benimaru_banner_v2.jpg" alt="Mr Benimaru"
            width="1520" height="1013" fetchpriority="high" />
-      <h1 class="hero__tagline" data-i18n="home.lead">One man, 71 costumes, lovingly hand-coded in p5.js.</h1>
+      <h1 class="hero__tagline" data-i18n="home.lead">Feelgood NFT project, lovingly hand-coded in p5.js.</h1>
       <div class="hero__cta">
         <!-- single CTA: the whitelist is the one action that matters pre-launch
              (the nav covers Collection). goo button: data-i18n lives on the inner
@@ -80,11 +80,14 @@
         <!-- vintage 1970s walnut colour TV — plug it in (below) to power on the CRT -->
         <div class="tv">
           <div class="tv__screen">
-            <!-- src is empty until powered on; JS swaps in data-gif so the GIF starts from frame 1 -->
+            <!-- src is empty until powered on; JS swaps in data-card (test card).
+                 Channel 2 (small knob) flips through the karuta stills, listed in js/tv.js -->
             <img class="tv__pic"
                  src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
-                 data-gif="Assets/benimaru-cycle.gif"
-                 alt="Mr Benimaru cycling through his many costumes" />
+                 data-card="Assets/test-card.jpg"
+                 alt="Test card — Mr Benimaru broadcast starting soon" />
+            <span class="tv__caption" aria-hidden="true">BENIMARU カラー<br>しばらくお待ちください ・ PLEASE STAND BY</span>
+            <span class="tv__static" aria-hidden="true"></span>
             <span class="tv__off" aria-hidden="true"></span>
           </div>
           <div class="tv__panel">
@@ -92,7 +95,9 @@
             <!-- red power knob: click to turn the TV on/off -->
             <button class="tv__power" type="button" aria-pressed="false"
                     aria-label="Turn the TV on" data-tv-power></button>
-            <span class="tv__knob" aria-hidden="true"></span>
+            <!-- channel knob: with the TV on, hop between the test card and the costume flipbook -->
+            <button class="tv__knob" type="button" aria-label="Change channel"
+                    data-tv-channel></button>
             <span class="tv__grille" aria-hidden="true"></span>
           </div>
         </div>

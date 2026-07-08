@@ -53,6 +53,7 @@
   var previewTimer = null;
   var mismatchTimer = null;
   var clearStampTimer = null;  // クリア stamp + auto-redeal after a win
+  var startStampTimer = null;  // スタート stamp once the preview flips down
   var dealTimers = [];  // pending per-card flip-ups, cleared on New Game
 
   /* ---- helpers ---- */
@@ -181,6 +182,20 @@
   var CLEAR_HOLD_MS = 450;    // let the last pair's pop land first
   var CLEAR_MS = 2000;        // クリア stamp animation — keep in sync with CSS
 
+  // slam the hinomaru stamp overlay over the board with the given text;
+  // modifier is an optional extra class (e.g. the green start variant)
+  function showStamp(text, modifier) {
+    var overlay = document.createElement('div');
+    overlay.className = 'game-clear' + (modifier ? ' ' + modifier : '');
+    overlay.setAttribute('aria-hidden', 'true');
+    var stamp = document.createElement('span');
+    stamp.className = 'game-clear__stamp';
+    stamp.textContent = text;
+    overlay.appendChild(stamp);
+    boardEl.appendChild(overlay);
+    return overlay;
+  }
+
   function win() {
     boardEl.classList.add('is-won');
 
@@ -193,14 +208,7 @@
     setStatus('You found them all! 🎉');
     lock = true;
     clearStampTimer = setTimeout(function () {
-      var overlay = document.createElement('div');
-      overlay.className = 'game-clear';
-      overlay.setAttribute('aria-hidden', 'true');
-      var stamp = document.createElement('span');
-      stamp.className = 'game-clear__stamp';
-      stamp.textContent = 'クリア';
-      overlay.appendChild(stamp);
-      boardEl.appendChild(overlay);
+      showStamp('クリア');
       clearStampTimer = setTimeout(newGame, CLEAR_MS);  // newGame clears the board, overlay included
     }, CLEAR_HOLD_MS);
   }
@@ -210,6 +218,7 @@
     clearTimeout(previewTimer);
     clearTimeout(mismatchTimer);
     clearTimeout(clearStampTimer);
+    clearTimeout(startStampTimer);
     dealTimers.forEach(clearTimeout);
     dealTimers = [];
     first = second = null;
@@ -257,6 +266,12 @@
       els.forEach(flipDown);
       lock = false;
       setStatus('Click on any card.');
+      // stamp スタート once the flip-down lands; overlay is pointer-events:
+      // none, so play can start under it
+      startStampTimer = setTimeout(function () {
+        var overlay = showStamp('スタート', 'game-clear--start');
+        startStampTimer = setTimeout(function () { overlay.remove(); }, CLEAR_MS);
+      }, CLEAR_HOLD_MS);
     }, dealTotal + PREVIEW_MS);
   }
 

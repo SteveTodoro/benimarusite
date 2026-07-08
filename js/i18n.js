@@ -26,7 +26,7 @@
     'footer.copy': '© 2026 Mr Benimaru. 着替え部屋のドアより。',
 
     // index
-    'home.lead': 'ひとりの男、71の衣装。<br>p5.jsで愛を込めてハンドコード。',
+    'home.lead': 'フィールグッドNFTプロジェクト。<br>p5.jsで愛を込めてハンドコード。',
     'cta.whitelist': 'ホワイトリストに登録',
     'home.launch': '🌊 OpenSeaで近日ローンチ',
     'home.stat.benimarus': 'ベニマルの数',

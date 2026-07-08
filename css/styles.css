@@ -371,8 +371,106 @@ img { max-width: 100%; height: auto; display: block; }
   height: 100%;
   aspect-ratio: 4 / 3;
   object-fit: cover;
+  /* bias the cover-crop right so the test card's clown isn't cut off
+     (channel 2's GIF is square, so only its height crops — unaffected) */
+  object-position: 73% 50%;
   background: #000;
   border-radius: 18px / 13px;   /* the classic curved-corner CRT glass */
+}
+/* while broadcasting: a gentle CRT brightness flicker + the odd 1px jump */
+.tv-row.is-on .tv__pic {
+  animation: tv-flicker 4.3s linear infinite, tv-jitter 5.7s linear infinite;
+}
+@keyframes tv-flicker {
+  0%, 100% { opacity: 1; }
+  7%   { opacity: .97; }
+  9%   { opacity: 1; }
+  34%  { opacity: .98; }
+  36%  { opacity: 1; }
+  53%  { opacity: .95; }
+  55%  { opacity: 1; }
+  78%  { opacity: .98; }
+  80%  { opacity: 1; }
+}
+@keyframes tv-jitter {
+  0%, 96.4%, 98.6%, 100% { transform: none; }
+  96.8% { transform: translateX(1px); }
+  97.6% { transform: translateX(-1px); }
+}
+/* a faint "hum bar" that slowly rolls down the picture */
+.tv__screen::before {
+  content: "";
+  position: absolute;
+  inset: 10px;
+  border-radius: 18px / 13px;
+  background: linear-gradient(to bottom,
+      rgba(255, 255, 255, 0) 0 88%,
+      rgba(205, 228, 255, .05) 91%,
+      rgba(255, 255, 255, .11) 94%,
+      rgba(205, 228, 255, .05) 97%,
+      rgba(255, 255, 255, 0) 100%) 0 0 / 100% 300% no-repeat;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 2;
+}
+.tv-row.is-on .tv__screen::before {
+  opacity: 1;
+  animation: tv-roll 8s linear infinite;
+}
+@keyframes tv-roll {
+  from { background-position-y: 150%; }
+  to   { background-position-y: 0%; }
+}
+/* broadcast ident strip, shown on the test-card channel only */
+.tv__caption {
+  position: absolute;
+  left: 50%;
+  bottom: 17%;
+  transform: translateX(-50%);
+  z-index: 1;
+  width: max-content;
+  max-width: 82%;
+  padding: .35em .9em;
+  background: rgba(10, 10, 10, .78);
+  color: #f4e7cf;
+  font-size: .62rem;
+  letter-spacing: .14em;
+  line-height: 1.7;
+  text-align: center;
+  border-radius: 2px;
+  text-shadow: 0 0 5px rgba(244, 231, 207, .4);
+  opacity: 0;
+  transition: opacity .3s ease;
+  pointer-events: none;
+}
+.tv-row.is-on:not(.is-ch2):not(.is-tuning) .tv__caption {
+  opacity: 1;
+  transition-delay: .4s;   /* let the power-on flash clear first */
+}
+/* burst of static while the channel knob "tunes" */
+.tv__static {
+  position: absolute;
+  inset: 10px;
+  border-radius: 18px / 13px;
+  background: #0e0e0e url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0;
+  pointer-events: none;
+  z-index: 2;
+}
+.tv-row.is-tuning .tv__static {
+  opacity: 1;
+  animation: tv-snow .4s steps(1, end) infinite;
+}
+@keyframes tv-snow {
+  0%   { background-position: 0 0; }
+  12%  { background-position: -28px 16px; }
+  25%  { background-position: 22px -34px; }
+  38%  { background-position: -46px -8px; }
+  50%  { background-position: 14px 30px; }
+  62%  { background-position: -10px -44px; }
+  75%  { background-position: 38px 6px; }
+  88%  { background-position: -20px 40px; }
+  100% { background-position: 0 0; }
 }
 /* "screen off" overlay: dark glass with faint scanlines, sits over the (empty) picture */
 .tv__off {
@@ -427,7 +525,12 @@ img { max-width: 100%; height: auto; display: block; }
   color: #f4e7cf;
   text-shadow: 0 1px 0 rgba(0, 0, 0, .5);
 }
+/* channel knob — a real button: with the TV on it hops to channel 2 */
 .tv__knob {
+  appearance: none;
+  -webkit-appearance: none;
+  font: inherit;
+  padding: 0;
   position: relative;
   width: 22px;
   aspect-ratio: 1;
@@ -435,7 +538,13 @@ img { max-width: 100%; height: auto; display: block; }
   border: 3px solid var(--line);
   background: radial-gradient(circle at 35% 30%, #4a4a4a 0%, #2b2b2b 70%);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, .25);
+  cursor: pointer;
+  transition: transform .3s ease, filter .2s ease;
 }
+.tv__knob:hover  { filter: brightness(1.2); }
+.tv__knob:active { transform: scale(.92); }
+.tv__knob:focus-visible { outline: 3px solid var(--line); outline-offset: 3px; }
+.tv-row.is-ch2 .tv__knob { transform: rotate(120deg); }
 .tv__knob::before {           /* pointer notch */
   content: "";
   position: absolute;
@@ -471,7 +580,7 @@ img { max-width: 100%; height: auto; display: block; }
   background: radial-gradient(circle at 35% 30%, #ff6f63 0%, var(--red) 58%, #b81e16 100%);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, .4);
   cursor: pointer;
-  transition: transform .25s ease, box-shadow .2s ease;
+  transition: transform .15s ease-out, box-shadow .2s ease;
 }
 .tv__power::before {           /* pointer notch, points up when off */
   content: "";
@@ -499,6 +608,12 @@ img { max-width: 100%; height: auto; display: block; }
   .tv__power { transition: none; }
   .tv-row.is-on .tv__power { transform: none; }
   .tv-row.is-on .tv__off { animation: none; opacity: 0; }
+  .tv-row.is-on .tv__pic { animation: none; }
+  .tv-row.is-on .tv__screen::before { animation: none; opacity: 0; }
+  .tv-row.is-tuning .tv__static { animation: none; }
+  .tv__knob { transition: none; }
+  .tv-row.is-ch2 .tv__knob { transform: none; }
+  .tv__caption { transition: none; }
 }
 @media (max-width: 560px) {
   .tv { max-width: 100%; }
@@ -755,6 +870,15 @@ img { max-width: 100%; height: auto; display: block; }
   16%     { transform: scale(1);  opacity: 1; }
   46%     { transform: scale(1.55); opacity: 0; }
   100%    { transform: scale(1.55); opacity: 0; }
+}
+/* green "go" variant — the スタート stamp when a karuta round opens;
+   pastel green needs dark text where the red stamp carries cream */
+.game-clear--start .game-clear__stamp {
+  background: var(--green);
+  color: var(--line);
+}
+.game-clear--start .game-clear__stamp::after {
+  border-color: var(--green);
 }
 
 /* the card is a flip container; the .card frame lives on each face */
@@ -1667,18 +1791,8 @@ main { position: relative; }
   animation: goo-pop .45s cubic-bezier(.34, 1.56, .64, 1) .18s backwards;
 }
 
-/* TV power knob: droplet-pop on power-on. The knob's on-state is
-   rotate(45deg), so the squash keyframes carry the rotation with them
-   to avoid a snap when the animation hands back to the static rule. */
-.tv-row.is-on .tv__power {
-  animation: goo-knob .5s cubic-bezier(.34, 1.56, .64, 1);
-}
-@keyframes goo-knob {
-  0%   { transform: scale(1) rotate(0deg); }
-  40%  { transform: scale(1.35, .85) rotate(45deg); }
-  70%  { transform: scale(.9, 1.12) rotate(45deg); }
-  100% { transform: scale(1) rotate(45deg); }
-}
+/* TV power knob: no pop — the base .tv__power transition snaps the
+   rotate(45deg) on-state in. */
 /* one-shot red ripple ring around the knob (::before is the notch) */
 .tv-row.is-on .tv__power::after {
   content: "";
@@ -1721,8 +1835,7 @@ main { position: relative; }
   .wl-form-wrap.is-unlocked .wl-step__check input,
   .tile.just-moved,
   .puzzle.is-solved,
-  .karuta-card.is-matched,
-  .tv-row.is-on .tv__power { animation: none; }
+  .karuta-card.is-matched { animation: none; }
   /* animation:none would freeze the ripples visible — remove them instead */
   .wl-step.is-done .wl-step__check::after,
   .tv-row.is-on .tv__power::after { content: none; }
