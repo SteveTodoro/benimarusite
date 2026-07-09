@@ -22,7 +22,7 @@
 
   // X application target — edit TWEET_ID when the pinned post is live.
   var X_HANDLE = 'MrBenimarusays';
-  var TWEET_ID = 'PASTE_PINNED_TWEET_ID_HERE';
+  var TWEET_ID = '2074897258068476113';
 
   // pick one of the two source images at random each load
   var IMAGES = ['Assets/puzzle1.jpg', 'Assets/puzzle2.jpg'];
