@@ -1,2 +1,6 @@
 .DS_Store
 benimaru-source-assets/
+
+# X-only assets — teaser clips + social banner, not used by the site
+Assets/gifs/
+Assets/benimaru-x-banner.png
