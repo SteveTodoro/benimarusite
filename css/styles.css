@@ -21,6 +21,12 @@
   --pink:    #F2A0A8;
   --red:     #E5352B;   /* rising-sun red */
 
+  /* darker text-weight accents — the pastels above fail WCAG AA as small text
+     on the paper bg, so these carry accent-coloured *text* (headings/labels/tags)
+     while the pastels stay for fills. --green-ink doubles as the door linework. */
+  --orange-ink: #B0461E;   /* 5.25:1 on --bg */
+  --green-ink:  #4E7A39;   /* 4.72:1 on --bg */
+
   --line:    #2B2B2B;            /* bold cartoon outline */
   --shadow:  6px 6px 0 var(--line);
   --shadow-sm: 4px 4px 0 var(--line);
@@ -79,7 +85,7 @@ img { max-width: 100%; height: auto; display: block; }
   letter-spacing: .16em;
   text-transform: uppercase;
   font-size: .85rem;
-  color: var(--orange);
+  color: var(--orange-ink);
   margin-bottom: .6rem;
 }
 
@@ -122,6 +128,8 @@ img { max-width: 100%; height: auto; display: block; }
 }
 .btn:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--line); }
 .btn:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--line); }
+/* .btn--goo blanks its own border, so this outer ring is the only focus cue */
+.btn:focus-visible { outline: 3px solid var(--line); outline-offset: 3px; }
 .btn--primary { background: var(--orange); }
 .btn--ghost   { background: var(--bg); }
 .btn--purple  { background: var(--purple); }
@@ -177,6 +185,7 @@ img { max-width: 100%; height: auto; display: block; }
   transition: background .15s ease, border-color .15s ease;
 }
 .nav__links a:hover { background: var(--bg-2); }
+.nav__links a:focus-visible { outline: 3px solid var(--line); outline-offset: 3px; }
 .nav__links a.is-active {
   background: var(--yellow);
   border-color: var(--line);
@@ -212,6 +221,7 @@ img { max-width: 100%; height: auto; display: block; }
 }
 .lang-toggle:hover { background: var(--bg-2); }
 .lang-toggle:active { transform: translateY(1px); }
+.lang-toggle:focus-visible { outline: 3px solid var(--line); outline-offset: 3px; }
 .lang-toggle__flag { font-size: 1.2rem; }
 
 @media (max-width: 760px) {
@@ -372,7 +382,7 @@ img { max-width: 100%; height: auto; display: block; }
   aspect-ratio: 4 / 3;
   object-fit: cover;
   /* bias the cover-crop right so the test card's clown isn't cut off
-     (channel 2's GIF is square, so only its height crops — unaffected) */
+     (channel 2's karuta stills are near-square, so only their height crops) */
   object-position: 73% 50%;
   background: #000;
   border-radius: 18px / 13px;   /* the classic curved-corner CRT glass */
@@ -784,7 +794,7 @@ img { max-width: 100%; height: auto; display: block; }
   display: flex;
   justify-content: space-between;
 }
-.nft figcaption .tag { color: var(--orange); }
+.nft figcaption .tag { color: var(--orange-ink); }
 
 /* ---------- Karuta memory game ---------- */
 .karuta-bar {
@@ -1123,7 +1133,7 @@ img { max-width: 100%; height: auto; display: block; }
   margin-top: 1rem;
   font-family: var(--font-head);
   font-weight: 600;
-  color: var(--green);
+  color: var(--green-ink);
 }
 .solved-badge.show { visibility: visible; }
 .thumb-hint {
@@ -1466,7 +1476,6 @@ img { max-width: 100%; height: auto; display: block; }
   transform: translateY(38px) scale(.97);
   transition: opacity .7s cubic-bezier(.22, 1, .36, 1),
               transform .7s cubic-bezier(.22, 1, .36, 1);
-  will-change: opacity, transform;
 }
 .reveal.is-in { opacity: 1; transform: none; }
 
@@ -1551,6 +1560,7 @@ img { max-width: 100%; height: auto; display: block; }
   padding: .4rem 1rem;
   box-shadow: var(--shadow-sm);
 }
+.footer__social a:focus-visible { outline: 3px solid var(--line); outline-offset: 3px; }
 .muted { opacity: .7; font-size: .9rem; }
 
 /* ---------- Liquid goo / bloom ----------
