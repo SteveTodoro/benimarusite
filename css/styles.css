@@ -1363,6 +1363,43 @@ span.tv__knob:active { transform: none; }
   user-select: none;
 }
 .wl-form-wrap.is-unlocked .door-shopkeeper { transform: translateX(0) rotate(4deg); }
+
+/* his speech bubble: hangs just above the fez (cutout is 699x1423, head at the
+   very top — at 225px wide the head tops out ~464px above the card floor).
+   Pops in once his .8s slide (delayed .5s) has landed. */
+.door-shopkeeper-bubble {
+  position: absolute;
+  z-index: 1;
+  bottom: 470px;
+  right: -6.2rem;
+  padding: .3rem .85rem;
+  background: #fff;
+  border: 2px solid var(--line);
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: .95rem;
+  white-space: nowrap;
+  opacity: 0;
+  transform: scale(.4);
+  transform-origin: 30% 100%;
+  transition: opacity .2s ease 1.45s, transform .4s cubic-bezier(.34, 1.6, .44, 1) 1.45s;
+  pointer-events: none;
+  user-select: none;
+}
+.door-shopkeeper-bubble::after {
+  /* tail pointing down at the fez */
+  content: "";
+  position: absolute;
+  bottom: -7px;
+  left: 24%;
+  width: 10px;
+  height: 10px;
+  background: #fff;
+  border-right: 2px solid var(--line);
+  border-bottom: 2px solid var(--line);
+  transform: rotate(45deg);
+}
+.wl-form-wrap.is-unlocked .door-shopkeeper-bubble { opacity: 1; transform: scale(1); }
 /* on mid-size viewports the peek can reach past the page edge — trim it
    there instead of growing a horizontal scrollbar. (on main, not body:
    body overflow propagates to the viewport and loses the clip) */
@@ -1370,12 +1407,17 @@ span.tv__knob:active { transform: none; }
 @media (max-width: 880px) {
   /* stacked layout: smaller peek so he stays inside the page margin */
   .door-shopkeeper { width: 150px; right: -1.4rem; }
+  /* 150px wide → head tops out ~311px up; tuck the bubble fully inside the
+     card edge and aim the tail right, at his sliver of a peek */
+  .door-shopkeeper-bubble { bottom: 316px; right: .3rem; font-size: .85rem; }
+  .door-shopkeeper-bubble::after { left: auto; right: 16%; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .door { transition: none; }
   .wl-form-wrap.is-unlocked .lock-overlay { display: none; }
   .door-shopkeeper { transition: none; }
+  .door-shopkeeper-bubble { transition: none; }
 }
 
 .form {
