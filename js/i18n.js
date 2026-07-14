@@ -20,10 +20,10 @@
     'nav.skip': 'コンテンツへスキップ',
     'nav.home': 'ホーム',
     'nav.inspiration': 'インスピレーション',
-    'nav.collection': 'コレクション',
+    'nav.collection': 'インタラクション',
     'nav.whitelist': 'ホワイトリスト',
     // footer (shared)
-    'footer.copy': '© 2026 Mr Benimaru. 着替え部屋のドアより。',
+    'footer.copy': '© 2026 Wabi Sabi Corporation.',
 
     // index
     'home.lead': 'フィールグッドNFTプロジェクト。<br>p5.jsで愛を込めてハンドコード。',
@@ -40,7 +40,7 @@
 
     // collection
     'col.eyebrow': 'ドアの向こうをのぞいてみよう',
-    'col.h1': 'コレクション',
+    'col.h1': 'インタラクション',
     'col.lead': 'カルタをやりましょう！',
     'col.status': 'カードを覚えて…',
     'col.newgame': '新しいゲーム',

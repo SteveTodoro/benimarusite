@@ -375,7 +375,8 @@ img { max-width: 100%; height: auto; display: block; }
   border-radius: 22px / 16px;
   box-shadow: inset 0 2px 4px rgba(255, 255, 255, .12);
 }
-.tv__screen img {
+.tv__screen img,
+.tv__screen video {
   display: block;
   width: 100%;
   height: 100%;
@@ -611,6 +612,13 @@ img { max-width: 100%; height: auto; display: block; }
   transform: rotate(45deg);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, .4), 0 0 0 3px rgba(229, 53, 43, .38);
 }
+
+/* decorative set (whitelist ident): knobs are <span>s, not <button>s —
+   drop the clickable affordances the shared knob styles carry */
+span.tv__power, span.tv__knob { cursor: default; }
+span.tv__power:hover, span.tv__knob:hover { filter: none; }
+span.tv__power:active { transform: rotate(45deg); }  /* stay in the "on" position */
+span.tv__knob:active { transform: none; }
 
 @media (prefers-reduced-motion: reduce) {
   .tv { transition: none; }

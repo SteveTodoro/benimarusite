@@ -40,7 +40,7 @@
       <ul class="nav__links" id="nav-links">
         <li><a href="index.html" data-i18n="nav.home">Home</a></li>
         <li><a href="inspiration.html" data-i18n="nav.inspiration">Inspiration</a></li>
-        <li><a href="collection.html" data-i18n="nav.collection">Collection</a></li>
+        <li><a href="collection.html" data-i18n="nav.collection">Interaction</a></li>
         <li><a href="whitelist.html" data-i18n="nav.whitelist">Whitelist</a></li>
         <li><a href="https://x.com/MrBenimarusays" target="_blank" rel="noopener">X / Twitter</a></li>
       </ul>
@@ -191,6 +191,31 @@
         </dl>
       </div>
     </section>
+
+    <!-- ===== Station ident — Wabi Sabi Corporation ===== -->
+    <!-- the home-page telly, always on: knobs are inert <span>s (no dead
+         buttons for keyboards/screen readers) and the off/static/caption
+         layers are dropped — this set only ever broadcasts the WSC ident -->
+    <section class="section" style="padding-top:0;">
+      <div class="wrap">
+        <div class="tv-row is-on">
+          <div class="tv">
+            <div class="tv__screen">
+              <video class="tv__pic" src="Assets/wsc-logo.mp4"
+                     width="640" height="480" autoplay muted loop playsinline
+                     disablepictureinpicture
+                     aria-label="Wabi Sabi Corporation — animated station ident"></video>
+            </div>
+            <div class="tv__panel">
+              <span class="tv__brand" aria-hidden="true">紅丸</span>
+              <span class="tv__power" aria-hidden="true"></span>
+              <span class="tv__knob" aria-hidden="true"></span>
+              <span class="tv__grille" aria-hidden="true"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
   </main>
 
   <!-- ===== FOOTER ===== -->
@@ -199,7 +224,7 @@
       <div class="footer__id">
         <div>
           <a href="index.html" class="nav__brand"><span class="dot"></span> MR BENIMARU</a>
-          <p class="muted" style="margin:.4rem 0 0;" data-i18n="footer.copy">© 2026 Mr Benimaru. As seen on the changing-room door.</p>
+          <p class="muted" style="margin:.4rem 0 0;" data-i18n="footer.copy">© 2026 Wabi Sabi Corporation.</p>
         </div>
         <span class="hanko" aria-hidden="true">紅丸</span>
       </div>
