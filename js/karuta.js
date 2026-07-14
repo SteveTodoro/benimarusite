@@ -36,7 +36,7 @@
     { src: 'Assets/Pics/karuta/kigae_493097.jpg', name: 'Ginza Line',   tag: '#003' },
     { src: 'Assets/Pics/karuta/kigae_50886.jpg',  name: 'Choose Life',  tag: '#004' },
     { src: 'Assets/Pics/karuta/kigae_61882.jpg',  name: 'Mr Benimaru',  tag: '#005' },
-    { src: 'Assets/Pics/karuta/kigae_621104.jpg', name: 'Mr Benimaru',  tag: '#006' },
+    { src: 'Assets/Pics/karuta/kigae_989850.png', name: 'OCM',          tag: '#006' },
     { src: 'Assets/Pics/karuta/kigae_680227.jpg', name: 'Tea Time',     tag: '#007' },
     { src: 'Assets/Pics/karuta/kigae_696412.jpg', name: 'Shinobeni',    tag: '#008' },
     { src: 'Assets/Pics/karuta/kigae_712663.jpg', name: 'Rising Sun',   tag: '#009' },

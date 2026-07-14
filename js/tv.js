@@ -35,7 +35,7 @@
     'Assets/Pics/karuta/kigae_493097.jpg',
     'Assets/Pics/karuta/kigae_50886.jpg',
     'Assets/Pics/karuta/kigae_61882.jpg',
-    'Assets/Pics/karuta/kigae_621104.jpg',
+    'Assets/Pics/karuta/kigae_989850.png',
     'Assets/Pics/karuta/kigae_680227.jpg',
     'Assets/Pics/karuta/kigae_696412.jpg',
     'Assets/Pics/karuta/kigae_712663.jpg',
