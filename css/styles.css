@@ -821,6 +821,15 @@ span.tv__knob:active { transform: none; }
 
 .karuta-board { position: relative; margin-top: 1.2rem; }   /* anchors the クリア overlay */
 
+/* phones: the shared .grid's 210px minimum column collapses the board to a
+   single tall stack — force 3×4 so the whole game stays in view */
+@media (max-width: 760px) {
+  .karuta-board {
+    grid-template-columns: repeat(3, 1fr);
+    gap: .6rem;
+  }
+}
+
 /* ---------- クリア celebration (shared game-win stamp) ----------
    Built on win by js/karuta.js (memory game, auto-redeals after) and
    js/puzzle.js (whitelist gate, stamp plays over the solved picture):
