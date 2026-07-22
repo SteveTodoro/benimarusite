@@ -1425,12 +1425,40 @@ span.tv__knob:active { transform: none; }
   /* on a phone the card — and so the door — would span the full column, leaving
      the peek nowhere to land but off-screen (main clips it). Pull the door in
      from the right so there's page margin for him to step into. */
-  .wl-form-wrap { width: min(100% - 4.2rem, 440px); }
-  /* ~40% of him clears the door edge, as on desktop */
-  .door-shopkeeper { width: 132px; right: -3.4rem; }
+  .wl-form-wrap {
+    width: min(100% - 4.2rem, 440px);
+    /* stacked, the steps make the card ~950px tall, which stretched the door
+       into a lift shaft. Pin it to the desktop's ~1.6:1 instead. */
+    --door-h: min(170vw - 196px, 620px);
+  }
+  /* while locked the steps come out of flow — still in the DOM and read by
+     screen readers, just no longer setting the height of the card the door
+     fills — so the card can shrink to the door. */
+  .wl-form-wrap:not(.is-unlocked) { min-height: calc(var(--door-h) + 6px); }
+  .wl-form-wrap:not(.is-unlocked) #wl-steps-wrap {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+  }
+  /* the door keeps that height once the card grows back around the steps, so
+     it swings open door-shaped instead of snapping tall first */
+  .lock-overlay { bottom: auto; height: var(--door-h); }
+  /* ~40% of him clears the door edge, as on desktop. Anchored to the top so
+     his feet stay on the threshold when the card grows on unlock. */
+  .door-shopkeeper {
+    width: 132px;
+    right: -3.4rem;
+    top: calc(var(--door-h) - 275px);
+    bottom: auto;
+  }
   /* 132px wide → head tops out ~275px up; bubble sits over the peek with the
      tail dropped onto the fez */
-  .door-shopkeeper-bubble { bottom: 280px; right: -3.1rem; font-size: .8rem; }
+  .door-shopkeeper-bubble {
+    right: -3.1rem;
+    top: calc(var(--door-h) - 312px);
+    bottom: auto;
+    font-size: .8rem;
+  }
   .door-shopkeeper-bubble::after { left: 62%; right: auto; }
 }
 
