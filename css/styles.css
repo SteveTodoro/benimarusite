@@ -1421,6 +1421,18 @@ span.tv__knob:active { transform: none; }
   .door-shopkeeper-bubble { bottom: 316px; right: .3rem; font-size: .85rem; }
   .door-shopkeeper-bubble::after { left: auto; right: 16%; }
 }
+@media (max-width: 560px) {
+  /* on a phone the card — and so the door — would span the full column, leaving
+     the peek nowhere to land but off-screen (main clips it). Pull the door in
+     from the right so there's page margin for him to step into. */
+  .wl-form-wrap { width: min(100% - 4.2rem, 440px); }
+  /* ~40% of him clears the door edge, as on desktop */
+  .door-shopkeeper { width: 132px; right: -3.4rem; }
+  /* 132px wide → head tops out ~275px up; bubble sits over the peek with the
+     tail dropped onto the fez */
+  .door-shopkeeper-bubble { bottom: 280px; right: -3.1rem; font-size: .8rem; }
+  .door-shopkeeper-bubble::after { left: 62%; right: auto; }
+}
 
 @media (prefers-reduced-motion: reduce) {
   .door { transition: none; }
