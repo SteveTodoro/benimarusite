@@ -4,3 +4,7 @@ benimaru-source-assets/
 # X-only assets — teaser clips + social banner, not used by the site
 Assets/gifs/
 Assets/benimaru-x-banner.png
+
+# timelapse sources — only the short mp4 is used on the site
+Assets/timelapse/*
+!Assets/timelapse/benimaru-timelapse-47.mp4

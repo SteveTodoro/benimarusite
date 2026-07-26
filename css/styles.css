@@ -633,6 +633,10 @@ span.tv__knob:active { transform: none; }
   .tv__knob { transition: none; }
   .tv-row.is-ch2 .tv__knob { transform: none; }
   .tv__caption { transition: none; }
+  /* the timelapse is paused + given controls from nav.js — CSS can't stop a video */
+  .sketchwin { transition: none; }
+  .sketchwin:hover { translate: none; box-shadow: var(--shadow); }
+  .sketchwin__pip { animation: none; }
 }
 @media (max-width: 560px) {
   .tv { max-width: 100%; }
@@ -767,6 +771,88 @@ span.tv__knob:active { transform: none; }
 .ref-grid .card:focus-within {
   translate: -3px -3px;
   box-shadow: 9px 9px 0 var(--line);
+}
+
+/* ---------- Sketch window (p5.js render timelapse, inspiration page) ----------
+   An editor-style frame so the clip reads as code running, not as broadcast —
+   the .tv set above is spoken for. Same ink/shadow tokens as .card. */
+.sketchwin {
+  max-width: min(480px, 100%);
+  margin: 2.4rem auto 0;
+  border: 3px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  background: var(--bg);
+  overflow: hidden;
+  transition: translate .16s ease, box-shadow .16s ease;
+}
+.sketchwin:hover {
+  translate: -3px -3px;
+  box-shadow: 9px 9px 0 var(--line);
+}
+.sketchwin__bar {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  padding: .5rem .8rem;
+  background: var(--bg-2);
+  border-bottom: 3px solid var(--line);
+  font-family: var(--font-head);
+  font-size: .85rem;
+  font-weight: 700;
+}
+.sketchwin__dots { display: flex; gap: 6px; }
+.sketchwin__dots i {
+  width: 11px;
+  height: 11px;
+  border: 2px solid var(--line);
+  border-radius: 50%;
+}
+.sketchwin__dots i:nth-child(1) { background: var(--red); }
+.sketchwin__dots i:nth-child(2) { background: var(--yellow); }
+.sketchwin__dots i:nth-child(3) { background: var(--green); }
+/* centred in the bar regardless of how wide the two end caps are */
+.sketchwin__name { margin-inline: auto; }
+.sketchwin__run {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: .7rem;
+  color: var(--green-ink);
+}
+.sketchwin__pip {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--green-ink);
+  animation: sketch-pip 1.6s ease-in-out infinite;
+}
+@keyframes sketch-pip {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: .25; }
+}
+/* white canvas: frame one of the timelapse is a blank sketch, so the
+   pre-load state reads as an empty canvas rather than a hole in the page */
+.sketchwin__canvas {
+  display: block;
+  width: 100%;
+  /* the height="720" attribute is a presentational hint on the height property,
+     so without this the box stays 720px tall and aspect-ratio never applies —
+     which letterboxes the square clip between white bands */
+  height: auto;
+  aspect-ratio: 1/1;
+  object-fit: contain;
+  background: #fff;
+}
+.sketchwin__caption {
+  padding: .7rem 1rem;
+  border-top: 3px solid var(--line);
+  font-size: .9rem;
+}
+.sketchwin__caption::before {
+  content: '> ';
+  color: var(--green-ink);
+  font-weight: 700;
 }
 
 /* ---------- Collection grid ---------- */

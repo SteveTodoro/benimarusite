@@ -79,4 +79,35 @@
       });
     });
   }
+
+  /* ----- clips that play while they're on screen -----
+     The autoplay attribute is only the no-JS fallback: browsers refuse muted
+     autoplay often enough (per-site auto-play settings, low-power mode,
+     off-screen throttling) that playback is driven explicitly here instead.
+     Opt in per video with data-play-in-view, so the always-on station ident
+     on the whitelist page keeps its own behaviour.
+       - reduced motion: never plays on its own, gains controls instead
+       - blocked anyway: play() rejects, so fall back to controls
+     Nothing is lost without IntersectionObserver — the attribute still applies. */
+  var clips = document.querySelectorAll('video[data-play-in-view]');
+  if (clips.length && reduceMotion) {
+    clips.forEach(function (vid) {
+      vid.removeAttribute('autoplay');
+      vid.autoplay = false;
+      vid.controls = true;
+      vid.pause();
+    });
+  } else if (clips.length && 'IntersectionObserver' in window) {
+    var clipIo = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        var vid = entry.target;
+        if (!entry.isIntersecting) { vid.pause(); return; }
+        var played = vid.play();
+        if (played && played.catch) {
+          played.catch(function () { vid.controls = true; });
+        }
+      });
+    }, { threshold: 0.25 });
+    clips.forEach(function (vid) { clipIo.observe(vid); });
+  }
 })();
